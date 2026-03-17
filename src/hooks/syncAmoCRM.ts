@@ -46,14 +46,15 @@ export const syncFormSubmissionToAmoCRM: CollectionAfterChangeHook = async ({
         value: item.value || '',
       })) || []
 
-    // Send to AmoCRM asynchronously (don't block the response)
-    // Using void to explicitly fire-and-forget
-    void sendFormSubmissionToAmoCRM(formTitle, submissionData)
+    console.log(`[AmoCRM Hook] Starting sync for: "${formTitle}"`)
 
-    console.log(`[AmoCRM Hook] Queued form submission sync for: "${formTitle}"`)
+    // Send to AmoCRM — await so we see success/error in logs
+    await sendFormSubmissionToAmoCRM(formTitle, submissionData)
+
+    console.log(`[AmoCRM Hook] ✅ Successfully synced to AmoCRM: "${formTitle}"`)
   } catch (err) {
     // Log but don't throw - AmoCRM sync should never break form submissions
-    console.error('[AmoCRM Hook] Error preparing form submission sync:', err)
+    console.error(`[AmoCRM Hook] ❌ Failed to sync to AmoCRM:`, err)
   }
 
   return doc
