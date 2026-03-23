@@ -1,0 +1,53 @@
+.media-save-button {
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 3px;
+    background-color: var(--theme-elevation-900);
+    color: var(--theme-elevation-50);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+    min-width: 100px;
+
+    &:hover:not(:disabled) {
+      opacity: 0.9;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &--busy {
+      opacity: 0.8;
+      cursor: wait;
+    }
+  }
+
+  &__spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--theme-elevation-50);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: media-save-spin 0.7s linear infinite;
+    flex-shrink: 0;
+  }
+
+  &__label--busy {
+    opacity: 0.9;
+  }
+}
+
+@keyframes media-save-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

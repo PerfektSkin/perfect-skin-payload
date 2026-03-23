@@ -17,6 +17,13 @@ export const Media: CollectionConfig = {
     read: anyone,
     update: authenticated,
   },
+  admin: {
+    components: {
+      edit: {
+        SaveButton: '@/components/admin/MediaSaveButton#MediaSaveButton',
+      },
+    },
+  },
   fields: [
     {
       name: 'alt',

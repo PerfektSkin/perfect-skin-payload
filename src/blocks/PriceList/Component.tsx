@@ -19,6 +19,7 @@ type ServiceType = {
 }
 
 const MOBILE_INITIAL_COUNT = 5
+const DESKTOP_INITIAL_COUNT = 10
 
 const ServiceRow: React.FC<{ service: ServiceType; circular?: boolean }> = ({
   service,
@@ -27,7 +28,7 @@ const ServiceRow: React.FC<{ service: ServiceType; circular?: boolean }> = ({
   <div className="group flex items-center gap-3 md:gap-4 py-2.5 md:py-4 px-3 -mx-3 rounded-lg transition-all duration-300 hover:bg-white/60 hover:shadow-sm">
     {/* Image / Placeholder — hidden on mobile for compact view */}
     <div
-      className={`hidden md:block shrink-0 w-12 h-12 md:w-16 md:h-16 xl:w-20 xl:h-20 overflow-hidden shadow-sm transition-transform duration-300 group-hover:scale-105 ${circular ? 'rounded-full' : 'rounded-xs'}`}
+      className={`hidden md:block shrink-0 w-5 h-5 md:w-7 md:h-7 xl:w-10 xl:h-10 overflow-hidden shadow-sm transition-transform duration-300 group-hover:scale-105 ${circular ? 'rounded-full' : 'rounded-xs'}`}
       style={{ backgroundColor: '#F1C8A7' }}
     >
       {service.image && typeof service.image !== 'string' && (
@@ -53,9 +54,30 @@ const ServiceRow: React.FC<{ service: ServiceType; circular?: boolean }> = ({
         </span>
       </div>
       {service.description && (
-        <p className="text-sm xl:text-base text-[#7A7A7A] mt-0.5 md:mt-1 font-work-sans leading-relaxed">{service.description}</p>
+        <p className="text-sm xl:text-base text-[#7A7A7A] mt-0.5 md:mt-1 font-work-sans leading-relaxed">
+          {service.description}
+        </p>
       )}
     </div>
+  </div>
+)
+
+const ExpandToggle: React.FC<{
+  expanded: boolean
+  onToggle: () => void
+  remainingCount: number
+  className?: string
+}> = ({ expanded, onToggle, remainingCount, className }) => (
+  <div className={`flex justify-center mt-4 ${className ?? ''}`}>
+    <button
+      onClick={onToggle}
+      className="cursor-pointer flex items-center gap-1.5 text-sm font-semibold text-[#3F3F3F] font-work-sans tracking-wide transition-colors duration-200 hover:text-[#C8A97E] py-2 px-4"
+    >
+      {expanded ? 'Arată mai puțin' : `Arată toate (+${remainingCount})`}
+      <ChevronDown
+        className={`w-4 h-4 transition-transform duration-300 ${expanded ? 'rotate-180' : ''}`}
+      />
+    </button>
   </div>
 )
 
@@ -64,40 +86,50 @@ const ServiceList: React.FC<{
   circular?: boolean
 }> = ({ services, circular }) => {
   const [expanded, setExpanded] = useState(false)
-  const hasMore = services.length > MOBILE_INITIAL_COUNT
+  const hasMobileMore = services.length > MOBILE_INITIAL_COUNT
+  const hasDesktopMore = services.length > DESKTOP_INITIAL_COUNT
+
+  const getItemClassName = (idx: number): string | undefined => {
+    if (expanded) return undefined
+    if (idx >= DESKTOP_INITIAL_COUNT) return 'hidden'
+    if (idx >= MOBILE_INITIAL_COUNT) return 'hidden md:block'
+    return undefined
+  }
 
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-0 md:gap-y-1">
         {services.map((service, idx) => (
-          <div
-            key={service.id || idx}
-            className={
-              !expanded && hasMore && idx >= MOBILE_INITIAL_COUNT
-                ? 'hidden md:block'
-                : undefined
-            }
-          >
+          <div key={service.id || idx} className={getItemClassName(idx)}>
             <ServiceRow service={service} circular={circular} />
           </div>
         ))}
       </div>
 
-      {/* Show more / less toggle — mobile only */}
-      {hasMore && (
-        <div className="md:hidden flex justify-center mt-4">
-          <button
-            onClick={() => setExpanded(!expanded)}
-            className="cursor-pointer flex items-center gap-1.5 text-sm font-semibold text-[#3F3F3F] font-work-sans tracking-wide transition-colors duration-200 hover:text-[#C8A97E] py-2 px-4"
-          >
-            {expanded
-              ? 'Arată mai puțin'
-              : `Arată toate (${services.length})`}
-            <ChevronDown
-              className={`w-4 h-4 transition-transform duration-300 ${expanded ? 'rotate-180' : ''}`}
-            />
-          </button>
-        </div>
+      {hasMobileMore && !hasDesktopMore && (
+        <ExpandToggle
+          expanded={expanded}
+          onToggle={() => setExpanded(!expanded)}
+          remainingCount={services.length - MOBILE_INITIAL_COUNT}
+          className="md:hidden"
+        />
+      )}
+
+      {hasDesktopMore && (
+        <>
+          <ExpandToggle
+            expanded={expanded}
+            onToggle={() => setExpanded(!expanded)}
+            remainingCount={services.length - MOBILE_INITIAL_COUNT}
+            className="md:hidden"
+          />
+          <ExpandToggle
+            expanded={expanded}
+            onToggle={() => setExpanded(!expanded)}
+            remainingCount={services.length - DESKTOP_INITIAL_COUNT}
+            className="hidden md:flex"
+          />
+        </>
       )}
     </>
   )
@@ -192,9 +224,7 @@ export const PriceListBlock: React.FC<Props> = (props) => {
                       className="w-full h-full object-cover rounded-full transition-transform duration-500 group-hover:scale-110"
                     />
                   ) : (
-                    <div
-                      className="w-full h-full rounded-full bg-[#F4F2ED]"
-                    />
+                    <div className="w-full h-full rounded-full bg-[#F4F2ED]" />
                   )}
                 </div>
               </button>
