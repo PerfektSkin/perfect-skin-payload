@@ -26,6 +26,7 @@ export const OurPartnersBlock: React.FC<Props> = ({ title, logos }) => {
   )
 
   if (populatedLogos.length === 0) return null
+  const seamlessLogos = [...populatedLogos, ...populatedLogos, ...populatedLogos]
 
   return (
     <section>
@@ -49,9 +50,9 @@ export const OurPartnersBlock: React.FC<Props> = ({ title, logos }) => {
             className="w-full md:px-10"
           >
             <CarouselContent className="-ml-6">
-              {populatedLogos.map((logo, index) => (
+              {seamlessLogos.map((logo, index) => (
                 <CarouselItem
-                  key={logo.id || index}
+                  key={`${logo.id || 'logo'}-${index}`}
                   className="pl-6 basis-[170px] sm:basis-[190px] md:basis-[220px] lg:basis-[240px]"
                 >
                   <div className="h-[64px] md:h-[74px] flex items-center justify-center">
@@ -62,11 +63,11 @@ export const OurPartnersBlock: React.FC<Props> = ({ title, logos }) => {
             </CarouselContent>
             <CarouselPrevious
               variant="ghost"
-              className="hidden md:flex -left-8 lg:-left-10 w-12 h-12 border-0 bg-transparent hover:bg-transparent text-[#2C2C2C]/40 hover:text-[#2C2C2C] disabled:opacity-30 [&_svg]:h-12! [&_svg]:w-12!"
+              className="hidden md:flex -left-8 lg:-left-10 w-12 h-12 border-0 bg-transparent hover:bg-transparent disabled:opacity-30 [&_svg]:h-12! [&_svg]:w-12! [&_svg]:text-[#fcbf90]!"
             />
             <CarouselNext
               variant="ghost"
-              className="hidden md:flex -right-8 lg:-right-10 w-12 h-12 border-0 bg-transparent hover:bg-transparent text-[#2C2C2C]/40 hover:text-[#2C2C2C] disabled:opacity-30 [&_svg]:h-12! [&_svg]:w-12!"
+              className="hidden md:flex -right-8 lg:-right-10 w-12 h-12 border-0 bg-transparent hover:bg-transparent disabled:opacity-30 [&_svg]:h-12! [&_svg]:w-12! [&_svg]:text-[#fcbf90]! "
             />
           </Carousel>
         </div>

@@ -76,11 +76,11 @@ export const TeamBlock: React.FC<Props> = (props) => {
           </CarouselContent>
           <CarouselPrevious
             variant="ghost"
-            className="hidden md:flex -left-2 w-16 h-16 border-0 bg-transparent hover:bg-transparent text-[#2C2C2C]/40 hover:text-[#2C2C2C] [&_svg]:h-16! [&_svg]:w-16!"
+            className="hidden md:flex -left-8 lg:-left-10 w-12 h-12 border-0 bg-transparent hover:bg-transparent disabled:opacity-30 [&_svg]:h-12! [&_svg]:w-12! [&_svg]:text-[#fcbf90]! "
           />
           <CarouselNext
             variant="ghost"
-            className="hidden md:flex -right-2 w-16 h-16 border-0 bg-transparent hover:bg-transparent text-[#2C2C2C]/40 hover:text-[#2C2C2C] [&_svg]:h-16! [&_svg]:w-16!"
+            className="hidden md:flex -right-8 lg:-right-10 w-12 h-12 border-0 bg-transparent hover:bg-transparent disabled:opacity-30 [&_svg]:h-12! [&_svg]:w-12! [&_svg]:text-[#fcbf90]! "
           />
         </Carousel>
       </div>
