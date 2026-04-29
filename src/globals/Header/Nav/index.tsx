@@ -66,7 +66,7 @@ const NavItemWithDropdown: React.FC<{
         className="inline-flex items-center"
       >
         <DropdownMenuTrigger asChild>
-          <button className="text-black tracking-[25%] font-normal md:text-xs lg:text-sm xl:text-base font-work-sans hover:opacity-70 transition-opacity">
+          <button className="text-black tracking-[17%] font-normal md:text-xs lg:text-sm xl:text-base font-work-sans hover:opacity-70 transition-opacity">
             {link?.label}
           </button>
         </DropdownMenuTrigger>
@@ -143,7 +143,7 @@ export const HeaderNav: React.FC<{ navItems?: NavItems }> = ({ navItems = [] }) 
           <Link
             key={i}
             href={itemHref}
-            className="text-black tracking-[25%] font-normal md:text-xs lg:text-sm xl:text-base font-work-sans hover:opacity-70 transition-opacity"
+            className="text-black tracking-[17%] font-normal md:text-xs lg:text-sm xl:text-base font-work-sans hover:opacity-70 transition-opacity"
           >
             {link?.label}
           </Link>
