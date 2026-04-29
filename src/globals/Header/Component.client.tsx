@@ -14,13 +14,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet'
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { TypedLocale } from 'payload'
 import { usePathname, useRouter } from '@/i18n/routing'
 import { Globe, Menu, ChevronRight, ChevronDown } from 'lucide-react'
@@ -80,11 +74,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ header }) => {
         <a href="/">
           <span className="flex items-center justify-center w-32">
             {logo && typeof logo === 'object' && (
-              <img
-                src={logo.url || ''}
-                alt={logo.alt || ''}
-                className="h-24 w-24 object-contain"
-              />
+              <img src={logo.url || ''} alt={logo.alt || ''} className="h-24 w-24 object-contain" />
             )}
           </span>
         </a>
@@ -102,7 +92,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ header }) => {
             {...ctaButton.link}
             label={ctaButton.label}
             appearance="default"
-            className="xl:px-8 py-3 font-bold! rounded-xs! bg-[#3F3F3F] hover:bg-[#3F3F3F]/90 text-white font-work-sans tracking-[25%] lg:text-sm! text-xs!"
+            className="xl:px-8 py-6 font-bold! rounded-xs! bg-[#3F3F3F] hover:bg-[#3F3F3F]/90 text-white font-work-sans tracking-[25%] lg:text-sm! text-xs!"
           />
         )}
         <LocaleSwitcher />
@@ -121,14 +111,9 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ header }) => {
             <span className="sr-only">Open menu</span>
           </Button>
         </SheetTrigger>
-        <SheetContent
-          side="left"
-          className="w-[350px] sm:w-[350px] bg-white border-r-0 p-0"
-        >
+        <SheetContent side="left" className="w-[350px] sm:w-[350px] bg-white border-r-0 p-0">
           <SheetHeader className="p-6 border-b border-black/10">
-            <SheetTitle className="text-[#2C2C2C] font-work-sans text-left">
-              {menuLabel}
-            </SheetTitle>
+            <SheetTitle className="text-[#2C2C2C] font-work-sans text-left">{menuLabel}</SheetTitle>
           </SheetHeader>
 
           {/* Mobile Navigation */}
@@ -187,11 +172,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ header }) => {
       <div className="absolute left-1/2 -translate-x-1/2 z-10">
         <a href="/">
           {logo && typeof logo === 'object' && (
-            <img
-              src={logo.url || ''}
-              alt={logo.alt || ''}
-              className="h-16 w-16 object-contain"
-            />
+            <img src={logo.url || ''} alt={logo.alt || ''} className="h-16 w-16 object-contain" />
           )}
         </a>
       </div>

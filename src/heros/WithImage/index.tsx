@@ -27,14 +27,19 @@ export const WithImageHero: React.FC<Page['hero']> = ({ title, backgroundImage, 
             {...button.link}
             label={button.label}
             appearance="default"
-            className="px-10 py-4 font-bold! rounded-xs! text-white font-work-sans tracking-[25%] text-sm! bg-transparent! border-white border-2 transition-all duration-300 ease-in-out hover:bg-white hover:text-[#3F3F3F] hover:scale-105 hover:shadow-[0_0_25px_rgba(255,255,255,0.3)]"
+            className="px-12 py-6 font-bold! rounded-xs! text-white font-work-sans tracking-[25%] text-sm! bg-transparent! border-white border-2 transition-all duration-300 ease-in-out hover:bg-white hover:text-[#3F3F3F] hover:scale-105 hover:shadow-[0_0_25px_rgba(255,255,255,0.3)]"
           />
         )}
       </div>
       <div className="min-h-[70vh] select-none">
         {backgroundImage && typeof backgroundImage === 'object' && (
           <React.Fragment>
-            <Media fill imgClassName="-z-10 object-cover object-bottom" priority resource={backgroundImage} />
+            <Media
+              fill
+              imgClassName="-z-10 object-cover object-bottom"
+              priority
+              resource={backgroundImage}
+            />
             <div className="absolute inset-0 bg-black/30 pointer-events-none -z-[5]" />
           </React.Fragment>
         )}

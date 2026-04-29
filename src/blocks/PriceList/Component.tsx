@@ -154,53 +154,7 @@ export const PriceListBlock: React.FC<Props> = (props) => {
             </h3>
           )}
 
-          {/* Woman Tabs — rectangular */}
-          <div className="grid grid-cols-2 gap-3 mb-10 md:flex md:flex-wrap md:justify-center">
-            {categories.map((cat, idx) => (
-              <Button
-                key={cat.id || idx}
-                onClick={() => setActiveTab(idx)}
-                className={`cursor-pointer flex items-center rounded-none! font-work-sans tracking-[25%] justify-start text-sm font-semibold transition-all duration-300 border text-left leading-tight hover:text-white hover:shadow-md w-full md:w-[200px] h-[60px] ${
-                  activeTab === idx
-                    ? 'bg-[#3F3F3F] text-white border-[#3F3F3F] shadow-md'
-                    : 'bg-white text-[#3F3F3F] border-[#E5E5E5] hover:border-[#3F3F3F] hover:bg-[#3F3F3F]'
-                }`}
-              >
-                <span className="flex flex-col">
-                  {cat.categoryName.split(' ').map((word, i) => (
-                    <span key={i}>{word}</span>
-                  ))}
-                </span>
-              </Button>
-            ))}
-          </div>
-        </div>
-
-        {/* Woman Services — full-width bg, contained content */}
-        <div
-          className="py-8 md:py-12 transition-colors duration-300"
-          style={{ backgroundColor: '#FFF8F3' }}
-        >
-          <div className="container">
-            {activeCategory?.womanServices && activeCategory.womanServices.length > 0 ? (
-              <ServiceList services={activeCategory.womanServices as ServiceType[]} />
-            ) : (
-              <p className="text-sm text-[#7A7A7A] text-center py-8">No services available</p>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* ——— Men Section ——— */}
-      <div>
-        <div className="container">
-          {menTitle && (
-            <h3 className="text-2xl md:text-5xl font-medium text-[#2C2C2C] mb-4 md:mb-8 font-urbanist text-center">
-              {menTitle}
-            </h3>
-          )}
-
-          {/* Men Tabs — circular image thumbnails */}
+          {/* Woman Tabs — circular image thumbnails */}
           <div className="flex gap-4 lg:gap-12 xl:gap-18 mb-10 md:mb-20 md:flex-wrap justify-start md:justify-center overflow-x-auto md:overflow-visible py-4 md:py-0 scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
             {categories.map((cat, idx) => (
               <button
@@ -232,6 +186,48 @@ export const PriceListBlock: React.FC<Props> = (props) => {
           </div>
         </div>
 
+        {/* Woman Services — full-width bg, contained content */}
+        <div
+          className="py-8 md:py-12 transition-colors duration-300"
+          style={{ backgroundColor: '#FFF8F3' }}
+        >
+          <div className="container">
+            {activeCategory?.womanServices && activeCategory.womanServices.length > 0 ? (
+              <ServiceList services={activeCategory.womanServices as ServiceType[]} circular />
+            ) : (
+              <p className="text-sm text-[#7A7A7A] text-center py-8">No services available</p>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* ——— Men Section ——— */}
+      <div>
+        <div className="container">
+          {menTitle && (
+            <h3 className="text-2xl md:text-5xl font-medium text-[#2C2C2C] mb-4 md:mb-8 font-urbanist text-center">
+              {menTitle}
+            </h3>
+          )}
+
+          {/* Men Tabs — rectangular */}
+          <div className="grid grid-cols-2 gap-3 mb-10 md:flex md:flex-wrap md:justify-center">
+            {categories.map((cat, idx) => (
+              <Button
+                key={cat.id || idx}
+                onClick={() => setActiveTab(idx)}
+                className={`cursor-pointer flex items-center rounded-none! font-work-sans tracking-[25%] justify-start text-sm font-semibold transition-all duration-300 border text-left leading-tight hover:text-white hover:shadow-md w-full md:w-[250px] h-[60px] ${
+                  activeTab === idx
+                    ? 'bg-[#3F3F3F] text-white border-[#3F3F3F] shadow-md'
+                    : 'bg-white text-[#3F3F3F] border-[#E5E5E5] hover:border-[#3F3F3F] hover:bg-[#3F3F3F]'
+                }`}
+              >
+                <span className="whitespace-normal wrap-break-word">{cat.categoryName}</span>
+              </Button>
+            ))}
+          </div>
+        </div>
+
         {/* Men Services — full-width bg, contained content */}
         <div
           className="py-8 md:py-12 transition-colors duration-300"
@@ -239,7 +235,7 @@ export const PriceListBlock: React.FC<Props> = (props) => {
         >
           <div className="container">
             {activeCategory?.menServices && activeCategory.menServices.length > 0 ? (
-              <ServiceList services={activeCategory.menServices as ServiceType[]} circular />
+              <ServiceList services={activeCategory.menServices as ServiceType[]} />
             ) : (
               <p className="text-sm text-[#7A7A7A] text-center py-8">No services available</p>
             )}

@@ -22,9 +22,7 @@ export const TeamBlock: React.FC<Props> = (props) => {
   if (!members || members.length === 0) return null
 
   // members can be either IDs (number) or populated Member objects
-  const populatedMembers = members.filter(
-    (m): m is Member => typeof m === 'object' && m !== null,
-  )
+  const populatedMembers = members.filter((m): m is Member => typeof m === 'object' && m !== null)
 
   if (populatedMembers.length === 0) return null
 
@@ -32,9 +30,7 @@ export const TeamBlock: React.FC<Props> = (props) => {
     <section>
       <div className="container">
         {/* Title */}
-        <h2
-          className="mb-10 text-center text-2xl md:text-3xl lg:text-5xl font-medium font-urbanist text-[#2C2C2C]"
-        >
+        <h2 className="mb-10 text-center text-2xl md:text-3xl lg:text-5xl font-medium font-urbanist text-[#2C2C2C]">
           {title}
         </h2>
 
@@ -54,13 +50,15 @@ export const TeamBlock: React.FC<Props> = (props) => {
               >
                 {/* Photo */}
                 <div className="group relative aspect-3/4 w-full overflow-hidden rounded-lg bg-[#F0F0F0] cursor-pointer">
-                  {member.photo && typeof member.photo !== 'string' && typeof member.photo !== 'number' && (
-                    <Media
-                      resource={member.photo}
-                      fill
-                      imgClassName="object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
-                  )}
+                  {member.photo &&
+                    typeof member.photo !== 'string' &&
+                    typeof member.photo !== 'number' && (
+                      <Media
+                        resource={member.photo}
+                        fill
+                        imgClassName="object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                    )}
 
                   {/* Overlay darkens on hover */}
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500" />

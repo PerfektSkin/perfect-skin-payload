@@ -35,6 +35,16 @@ export const Footer: GlobalConfig = {
           type: 'text',
           label: 'Instagram URL',
         },
+        {
+          name: 'youtube',
+          type: 'text',
+          label: 'YouTube URL',
+        },
+        {
+          name: 'google',
+          type: 'text',
+          label: 'Google URL',
+        },
       ],
     },
     {

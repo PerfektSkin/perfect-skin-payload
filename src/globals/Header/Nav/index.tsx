@@ -122,7 +122,7 @@ export const HeaderNav: React.FC<{ navItems?: NavItems }> = ({ navItems = [] }) 
   }
 
   return (
-    <nav className="flex items-center gap-8">
+    <nav className="flex items-center gap-5">
       {navItems.map((item, i) => {
         const { link, subItems } = item
         const hasSubItems = subItems && Array.isArray(subItems) && subItems.length > 0

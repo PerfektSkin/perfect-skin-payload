@@ -74,6 +74,7 @@ export interface Config {
     users: User;
     members: Member;
     reviews: Review;
+    news: News;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -92,6 +93,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     members: MembersSelect<false> | MembersSelect<true>;
     reviews: ReviewsSelect<false> | ReviewsSelect<true>;
+    news: NewsSelect<false> | NewsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -182,6 +184,8 @@ export interface Page {
     | AboutUsBlock
     | FollowUsBlock
     | ClientReviewsBlock
+    | OurPartnersBlock
+    | NewsBlock
   )[];
   sidebarContactTitle?: string | null;
   /**
@@ -964,6 +968,46 @@ export interface Review {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "OurPartnersBlock".
+ */
+export interface OurPartnersBlock {
+  title: string;
+  /**
+   * Upload/select logos shown in the auto-scrolling partners carousel.
+   */
+  logos: (number | Media)[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'ourPartners';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "NewsBlock".
+ */
+export interface NewsBlock {
+  title: string;
+  /**
+   * Select existing news items to reuse in this block.
+   */
+  newsItems: (number | News)[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'newsBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "news".
+ */
+export interface News {
+  id: number;
+  image: number | Media;
+  title: string;
+  shortDescription: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1089,6 +1133,10 @@ export interface PayloadLockedDocument {
         value: number | Review;
       } | null)
     | ({
+        relationTo: 'news';
+        value: number | News;
+      } | null)
+    | ({
         relationTo: 'redirects';
         value: number | Redirect;
       } | null)
@@ -1186,6 +1234,8 @@ export interface PagesSelect<T extends boolean = true> {
         aboutUs?: T | AboutUsBlockSelect<T>;
         followUs?: T | FollowUsBlockSelect<T>;
         clientReviews?: T | ClientReviewsBlockSelect<T>;
+        ourPartners?: T | OurPartnersBlockSelect<T>;
+        newsBlock?: T | NewsBlockSelect<T>;
       };
   sidebarContactTitle?: T;
   sidebarContactItems?:
@@ -1428,6 +1478,26 @@ export interface ClientReviewsBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "OurPartnersBlock_select".
+ */
+export interface OurPartnersBlockSelect<T extends boolean = true> {
+  title?: T;
+  logos?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "NewsBlock_select".
+ */
+export interface NewsBlockSelect<T extends boolean = true> {
+  title?: T;
+  newsItems?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts_select".
  */
 export interface PostsSelect<T extends boolean = true> {
@@ -1588,6 +1658,17 @@ export interface ReviewsSelect<T extends boolean = true> {
   review?: T;
   date?: T;
   rating?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "news_select".
+ */
+export interface NewsSelect<T extends boolean = true> {
+  image?: T;
+  title?: T;
+  shortDescription?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1897,6 +1978,8 @@ export interface Footer {
     facebook?: string | null;
     tiktok?: string | null;
     instagram?: string | null;
+    youtube?: string | null;
+    google?: string | null;
   };
   /**
    * This column automatically displays all pages from the Pages collection. Manual links below are used as fallback if no pages exist.
@@ -2093,6 +2176,8 @@ export interface FooterSelect<T extends boolean = true> {
         facebook?: T;
         tiktok?: T;
         instagram?: T;
+        youtube?: T;
+        google?: T;
       };
   column1?:
     | T

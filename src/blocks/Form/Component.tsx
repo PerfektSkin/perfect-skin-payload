@@ -141,9 +141,7 @@ export const FormBlock: React.FC<
                 {title}
               </h2>
             )}
-            {subtitle && (
-              <p className="mt-2 text-sm md:text-base text-white/80">{subtitle}</p>
-            )}
+            {subtitle && <p className="mt-2 text-sm md:text-base text-white/80">{subtitle}</p>}
           </div>
         )}
 
@@ -154,12 +152,24 @@ export const FormBlock: React.FC<
           {!isLoading && hasSubmitted && confirmationType === 'message' && (
             <div className="text-center py-8 mx-auto">
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-500/20 mb-4">
-                <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                <svg
+                  className="w-8 h-8 text-green-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
                 </svg>
               </div>
               {confirmationMessage && (
-                <p className="text-white/90 text-xl lg:text-2xl whitespace-pre-line font-urbanist">{confirmationMessage}</p>
+                <p className="text-white/90 text-xl lg:text-2xl whitespace-pre-line font-urbanist">
+                  {confirmationMessage}
+                </p>
               )}
             </div>
           )}
@@ -180,8 +190,7 @@ export const FormBlock: React.FC<
 
                       // Force full width for certain field types
                       const forceFullWidth =
-                        field.blockType === 'textarea' ||
-                        field.blockType === 'checkbox'
+                        field.blockType === 'textarea' || field.blockType === 'checkbox'
 
                       const width = forceFullWidth ? 100 : fieldWidth
 
@@ -190,14 +199,16 @@ export const FormBlock: React.FC<
                           key={index}
                           className="min-w-0 w-full md:w-auto"
                           style={{
-                            ...(width === 100 ? {
-                              flexBasis: '100%',
-                              flexGrow: 1,
-                            } : {
-                              flexBasis: `calc(${width}% - 0.5rem)`,
-                              flexGrow: 0,
-                              flexShrink: 0,
-                            })
+                            ...(width === 100
+                              ? {
+                                  flexBasis: '100%',
+                                  flexGrow: 1,
+                                }
+                              : {
+                                  flexBasis: `calc(${width}% - 0.5rem)`,
+                                  flexGrow: 0,
+                                  flexShrink: 0,
+                                }),
                           }}
                         >
                           <Field
@@ -219,7 +230,7 @@ export const FormBlock: React.FC<
                 form={formID}
                 type="submit"
                 variant="default"
-                className="w-full mt-2 h-11 rounded-md bg-black hover:bg-[#2C2C2C] text-white text-sm font-medium"
+                className="w-full mt-2 h-11 rounded-md bg-black hover:bg-[#2C2C2C] text-white text-lg font-medium"
               >
                 {submitButtonLabel}
               </Button>

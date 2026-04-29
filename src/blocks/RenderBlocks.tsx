@@ -13,6 +13,8 @@ import { TeamBlock } from '@/blocks/Team/Component'
 import { AboutUsBlock } from '@/blocks/AboutUs/Component'
 import { FollowUsBlock } from '@/blocks/FollowUs/Component'
 import { ClientReviewsBlock } from '@/blocks/ClientReviews/Component'
+import { OurPartnersBlock } from '@/blocks/OurPartners/Component'
+import { NewsBlockComponent } from '@/blocks/News/Component'
 import { AnimateOnScroll } from '@/components/AnimateOnScroll'
 import { TypedLocale } from 'payload'
 
@@ -27,6 +29,8 @@ const blockComponents = {
   aboutUs: AboutUsBlock,
   followUs: FollowUsBlock,
   clientReviews: ClientReviewsBlock,
+  ourPartners: OurPartnersBlock,
+  newsBlock: NewsBlockComponent,
 }
 
 /** Cycle through animation variants for visual variety */

@@ -1,7 +1,7 @@
 import { getCachedGlobal } from '@/utilities/getGlobals'
 import Link from 'next/link'
 import React from 'react'
-import { Send } from 'lucide-react'
+import { Globe, Send, Youtube } from 'lucide-react'
 import { FacebookIcon } from './icons/FacebookIcon'
 import { TiktokIcon } from './icons/TiktokIcon'
 import { InstagramIcon } from './icons/InstagramIcon'
@@ -53,8 +53,7 @@ function getExcludedNavSlugs(header: HeaderType): Set<string> {
   if (!navItems) return slugs
 
   for (const item of navItems) {
-    const hasSubItems =
-      item.subItems && Array.isArray(item.subItems) && item.subItems.length > 0
+    const hasSubItems = item.subItems && Array.isArray(item.subItems) && item.subItems.length > 0
     if (!hasSubItems) continue
 
     // Exclude the parent nav item's page
@@ -126,7 +125,7 @@ export async function Footer({ locale }: { locale: TypedLocale }) {
             {logo && typeof logo !== 'string' && (
               <Link href="/">
                 <Media resource={logo} imgClassName="max-w-[7rem] lg:max-w-[11rem]" />
-        </Link>
+              </Link>
             )}
             {socialMedia && (
               <div className="flex gap-4 text-white">
@@ -135,7 +134,7 @@ export async function Footer({ locale }: { locale: TypedLocale }) {
                     href={socialMedia.facebook}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-8 h-8 rounded-full bg-[#C8A97E] flex items-center justify-center hover:opacity-80 transition-opacity cursor-pointer"
+                    className="w-7 h-7 rounded-full bg-[#C8A97E] flex items-center justify-center hover:opacity-80 transition-opacity cursor-pointer"
                     aria-label="Facebook"
                   >
                     <FacebookIcon className="w-5 h-5" />
@@ -146,7 +145,7 @@ export async function Footer({ locale }: { locale: TypedLocale }) {
                     href={socialMedia.tiktok}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-8 h-8 rounded-full bg-[#C8A97E] flex items-center justify-center hover:opacity-80 transition-opacity cursor-pointer"
+                    className="w-7 h-7 rounded-full bg-[#C8A97E] flex items-center justify-center hover:opacity-80 transition-opacity cursor-pointer"
                     aria-label="TikTok"
                   >
                     <TiktokIcon className="w-5 h-5" />
@@ -157,10 +156,32 @@ export async function Footer({ locale }: { locale: TypedLocale }) {
                     href={socialMedia.instagram}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-8 h-8 rounded-full bg-[#C8A97E] flex items-center justify-center hover:opacity-80 transition-opacity cursor-pointer"
+                    className="w-7 h-7 rounded-full bg-[#C8A97E] flex items-center justify-center hover:opacity-80 transition-opacity cursor-pointer"
                     aria-label="Instagram"
                   >
                     <InstagramIcon className="w-5 h-5" />
+                  </a>
+                )}
+                {(socialMedia as any).youtube && (
+                  <a
+                    href={(socialMedia as any).youtube}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-7 h-7 rounded-full bg-[#C8A97E] flex items-center justify-center hover:opacity-80 transition-opacity cursor-pointer"
+                    aria-label="YouTube"
+                  >
+                    <Youtube className="w-5 h-5" />
+                  </a>
+                )}
+                {(socialMedia as any).google && (
+                  <a
+                    href={(socialMedia as any).google}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-7 h-7 rounded-full bg-[#C8A97E] flex items-center justify-center hover:opacity-80 transition-opacity cursor-pointer"
+                    aria-label="Google"
+                  >
+                    <Globe className="w-5 h-5" />
                   </a>
                 )}
               </div>
@@ -194,22 +215,20 @@ export async function Footer({ locale }: { locale: TypedLocale }) {
                       )
                     }
                     return null
-            })}
-          </nav>
+                  })}
+                </nav>
               )}
-              {(!pages || pages.length === 0) &&
-                column1.links &&
-                column1.links.length > 0 && (
-                  <nav className="flex flex-col gap-3">
-                    {column1.links.map((item, i) => (
-                      <CMSLink
-                        key={i}
-                        {...item.link}
-                        className="font-work-sans text-[#909596] text-sm hover:text-white transition-colors cursor-pointer"
-                      />
-                    ))}
-                  </nav>
-                )}
+              {(!pages || pages.length === 0) && column1.links && column1.links.length > 0 && (
+                <nav className="flex flex-col gap-3">
+                  {column1.links.map((item, i) => (
+                    <CMSLink
+                      key={i}
+                      {...item.link}
+                      className="font-work-sans text-[#909596] text-sm hover:text-white transition-colors cursor-pointer"
+                    />
+                  ))}
+                </nav>
+              )}
             </div>
           )}
 
@@ -307,9 +326,7 @@ export async function Footer({ locale }: { locale: TypedLocale }) {
           {/* Left: Copyright + Legal Links */}
           <div className="flex flex-col lg:flex-row items-center gap-4 lg:gap-10">
             {copyright?.copyrightText && (
-              <p className="font-work-sans text-[#A4A9AA] text-sm">
-                {copyright.copyrightText}
-              </p>
+              <p className="font-work-sans text-[#A4A9AA] text-sm">{copyright.copyrightText}</p>
             )}
             {copyright?.legalLinks && copyright.legalLinks.length > 0 && (
               <div className="flex flex-wrap gap-10">

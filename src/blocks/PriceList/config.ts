@@ -77,7 +77,7 @@ export const PriceList: Block = {
           name: 'categoryImage',
           type: 'upload',
           relationTo: 'media',
-          label: 'Category Image (for Men tabs)',
+          label: 'Category Image',
         },
         {
           name: 'womanServices',
