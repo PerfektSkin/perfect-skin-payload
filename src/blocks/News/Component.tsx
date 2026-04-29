@@ -2,7 +2,13 @@
 
 import React from 'react'
 import { Media } from '@/components/Media'
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel'
 import type { Media as MediaType, Page } from '@/payload-types'
 
 type NewsItem = {

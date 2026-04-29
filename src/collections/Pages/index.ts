@@ -20,6 +20,7 @@ import { slugField } from '@/fields/slug'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { revalidatePage } from './hooks/revalidatePage'
+import { syncLayoutFromRoHandler } from './endpoints/syncLayoutFromRo'
 
 import {
   MetaDescriptionField,
@@ -90,6 +91,15 @@ export const Pages: CollectionConfig = {
         },
         {
           fields: [
+            {
+              type: 'ui',
+              name: 'syncLayoutButton',
+              admin: {
+                components: {
+                  Field: '@/components/admin/SyncLayoutButton#SyncLayoutButton',
+                },
+              },
+            },
             {
               name: 'layout',
               type: 'blocks',
@@ -297,6 +307,13 @@ export const Pages: CollectionConfig = {
     afterChange: [revalidatePage],
     beforeChange: [populatePublishedAt],
   },
+  endpoints: [
+    {
+      path: '/:id/sync-layouts',
+      method: 'post',
+      handler: syncLayoutFromRoHandler,
+    },
+  ],
   versions: {
     drafts: true,
     maxPerDoc: 50,
