@@ -75,6 +75,7 @@ export interface Config {
     members: Member;
     reviews: Review;
     news: News;
+    offers: Offer;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -94,6 +95,7 @@ export interface Config {
     members: MembersSelect<false> | MembersSelect<true>;
     reviews: ReviewsSelect<false> | ReviewsSelect<true>;
     news: NewsSelect<false> | NewsSelect<true>;
+    offers: OffersSelect<false> | OffersSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -186,6 +188,7 @@ export interface Page {
     | ClientReviewsBlock
     | OurPartnersBlock
     | NewsBlock
+    | OffersBlock
   )[];
   sidebarContactTitle?: string | null;
   /**
@@ -1010,9 +1013,73 @@ export interface NewsBlock {
  */
 export interface News {
   id: number;
+  /**
+   * Shown in the news carousel and at the top of the news page.
+   */
   image: number | Media;
   title: string;
+  /**
+   * Short summary shown in the carousel listing.
+   */
   shortDescription: string;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  layout: (
+    | CallToActionBlock
+    | ContentBlock
+    | MediaBlock
+    | ArchiveBlock
+    | FormBlock
+    | PriceListBlock
+    | TeamBlock
+    | AboutUsBlock
+    | FollowUsBlock
+    | ClientReviewsBlock
+    | OurPartnersBlock
+  )[];
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "OffersBlock".
+ */
+export interface OffersBlock {
+  title: string;
+  /**
+   * Select existing offers to display in this carousel block.
+   */
+  offerItems: (number | Offer)[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'offersBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "offers".
+ */
+export interface Offer {
+  id: number;
+  /**
+   * Shown in the offers carousel and at the top of the offer page.
+   */
+  image: number | Media;
+  title: string;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  layout: (
+    | CallToActionBlock
+    | ContentBlock
+    | MediaBlock
+    | ArchiveBlock
+    | FormBlock
+    | PriceListBlock
+    | TeamBlock
+    | AboutUsBlock
+    | FollowUsBlock
+    | ClientReviewsBlock
+    | OurPartnersBlock
+  )[];
   updatedAt: string;
   createdAt: string;
 }
@@ -1147,6 +1214,10 @@ export interface PayloadLockedDocument {
         value: number | News;
       } | null)
     | ({
+        relationTo: 'offers';
+        value: number | Offer;
+      } | null)
+    | ({
         relationTo: 'redirects';
         value: number | Redirect;
       } | null)
@@ -1246,6 +1317,7 @@ export interface PagesSelect<T extends boolean = true> {
         clientReviews?: T | ClientReviewsBlockSelect<T>;
         ourPartners?: T | OurPartnersBlockSelect<T>;
         newsBlock?: T | NewsBlockSelect<T>;
+        offersBlock?: T | OffersBlockSelect<T>;
       };
   sidebarContactTitle?: T;
   sidebarContactItems?:
@@ -1512,6 +1584,16 @@ export interface NewsBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "OffersBlock_select".
+ */
+export interface OffersBlockSelect<T extends boolean = true> {
+  title?: T;
+  offerItems?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts_select".
  */
 export interface PostsSelect<T extends boolean = true> {
@@ -1683,6 +1765,50 @@ export interface NewsSelect<T extends boolean = true> {
   image?: T;
   title?: T;
   shortDescription?: T;
+  slug?: T;
+  slugLock?: T;
+  layout?:
+    | T
+    | {
+        cta?: T | CallToActionBlockSelect<T>;
+        content?: T | ContentBlockSelect<T>;
+        mediaBlock?: T | MediaBlockSelect<T>;
+        archive?: T | ArchiveBlockSelect<T>;
+        formBlock?: T | FormBlockSelect<T>;
+        priceList?: T | PriceListBlockSelect<T>;
+        team?: T | TeamBlockSelect<T>;
+        aboutUs?: T | AboutUsBlockSelect<T>;
+        followUs?: T | FollowUsBlockSelect<T>;
+        clientReviews?: T | ClientReviewsBlockSelect<T>;
+        ourPartners?: T | OurPartnersBlockSelect<T>;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "offers_select".
+ */
+export interface OffersSelect<T extends boolean = true> {
+  image?: T;
+  title?: T;
+  slug?: T;
+  slugLock?: T;
+  layout?:
+    | T
+    | {
+        cta?: T | CallToActionBlockSelect<T>;
+        content?: T | ContentBlockSelect<T>;
+        mediaBlock?: T | MediaBlockSelect<T>;
+        archive?: T | ArchiveBlockSelect<T>;
+        formBlock?: T | FormBlockSelect<T>;
+        priceList?: T | PriceListBlockSelect<T>;
+        team?: T | TeamBlockSelect<T>;
+        aboutUs?: T | AboutUsBlockSelect<T>;
+        followUs?: T | FollowUsBlockSelect<T>;
+        clientReviews?: T | ClientReviewsBlockSelect<T>;
+        ourPartners?: T | OurPartnersBlockSelect<T>;
+      };
   updatedAt?: T;
   createdAt?: T;
 }

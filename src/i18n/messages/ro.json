@@ -13,5 +13,7 @@
   "previous": "Anterior",
   "next": "Următor",
   "more-pages": "Mai multe pagini",
-  "read-more": "Citește mai mult"
+  "read-more": "Citește mai mult",
+  "show-less": "Arată mai puțin",
+  "show-more": "Arată toate (+{count})"
 }

@@ -15,6 +15,7 @@ import { FollowUsBlock } from '@/blocks/FollowUs/Component'
 import { ClientReviewsBlock } from '@/blocks/ClientReviews/Component'
 import { OurPartnersBlock } from '@/blocks/OurPartners/Component'
 import { NewsBlockComponent } from '@/blocks/News/Component'
+import { OffersBlockComponent } from '@/blocks/Offers/Component'
 import { AnimateOnScroll } from '@/components/AnimateOnScroll'
 import { TypedLocale } from 'payload'
 
@@ -31,6 +32,7 @@ const blockComponents = {
   clientReviews: ClientReviewsBlock,
   ourPartners: OurPartnersBlock,
   newsBlock: NewsBlockComponent,
+  offersBlock: OffersBlockComponent,
 }
 
 /** Cycle through animation variants for visual variety */

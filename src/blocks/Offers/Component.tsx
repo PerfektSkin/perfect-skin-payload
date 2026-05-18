@@ -10,22 +10,22 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel'
-import type { Media as MediaType, News, Page } from '@/payload-types'
+import type { Offer, Page } from '@/payload-types'
 import { TypedLocale } from 'payload'
 
-type Props = Extract<Page['layout'][0], { blockType: 'newsBlock' }> & {
+type Props = Extract<Page['layout'][0], { blockType: 'offersBlock' }> & {
   id?: string
   locale: TypedLocale
 }
 
-export const NewsBlockComponent: React.FC<Props> = ({ title, newsItems }) => {
-  if (!newsItems || newsItems.length === 0) return null
+export const OffersBlockComponent: React.FC<Props> = ({ title, offerItems }) => {
+  if (!offerItems || offerItems.length === 0) return null
 
-  const populatedNews = newsItems.filter(
-    (item): item is News => typeof item === 'object' && item !== null,
+  const populatedOffers = offerItems.filter(
+    (item): item is Offer => typeof item === 'object' && item !== null,
   )
 
-  if (populatedNews.length === 0) return null
+  if (populatedOffers.length === 0) return null
 
   return (
     <section>
@@ -44,8 +44,8 @@ export const NewsBlockComponent: React.FC<Props> = ({ title, newsItems }) => {
           className="w-full md:px-10"
         >
           <CarouselContent className="-ml-6">
-            {populatedNews.map((item, index) => {
-              const href = item.slug ? `/news/${item.slug}` : null
+            {populatedOffers.map((item, index) => {
+              const href = item.slug ? `/offers/${item.slug}` : null
 
               const card = (
                 <article className="flex flex-col gap-3 h-full">
@@ -62,11 +62,6 @@ export const NewsBlockComponent: React.FC<Props> = ({ title, newsItems }) => {
                     <h3 className="text-xl leading-tight font-semibold text-[#2C2C2C] font-urbanist transition-colors group-hover:text-[#C8A97E]">
                       {item.title}
                     </h3>
-                  )}
-                  {item.shortDescription && (
-                    <p className="text-sm md:text-base text-[#5A5A5A] font-work-sans leading-relaxed line-clamp-3">
-                      {item.shortDescription}
-                    </p>
                   )}
                 </article>
               )

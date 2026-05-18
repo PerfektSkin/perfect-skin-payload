@@ -14,6 +14,7 @@ import { FollowUs } from '../../blocks/FollowUs/config'
 import { ClientReviews } from '../../blocks/ClientReviews/config'
 import { OurPartners } from '../../blocks/OurPartners/config'
 import { NewsBlock } from '../../blocks/News/config'
+import { OffersBlock } from '../../blocks/Offers/config'
 import { hero } from '@/heros/config'
 import { link } from '@/fields/link'
 import { slugField } from '@/fields/slug'
@@ -104,7 +105,7 @@ export const Pages: CollectionConfig = {
               name: 'layout',
               type: 'blocks',
               localized: true,
-              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock, PriceList, Team, AboutUs, FollowUs, ClientReviews, OurPartners, NewsBlock],
+              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock, PriceList, Team, AboutUs, FollowUs, ClientReviews, OurPartners, NewsBlock, OffersBlock],
               required: true,
             },
           ],

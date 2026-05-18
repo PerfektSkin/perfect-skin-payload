@@ -5,6 +5,7 @@ import Image from 'next/image'
 import type { Page } from '@/payload-types'
 import { Button } from '@/components/ui/button'
 import { ChevronDown } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 type Props = Extract<Page['layout'][0], { blockType: 'priceList' }> & {
   id?: string
@@ -67,19 +68,23 @@ const ExpandToggle: React.FC<{
   onToggle: () => void
   remainingCount: number
   className?: string
-}> = ({ expanded, onToggle, remainingCount, className }) => (
-  <div className={`flex justify-center mt-4 ${className ?? ''}`}>
-    <button
-      onClick={onToggle}
-      className="cursor-pointer flex items-center gap-1.5 text-sm font-semibold text-[#3F3F3F] font-work-sans tracking-wide transition-colors duration-200 hover:text-[#C8A97E] py-2 px-4"
-    >
-      {expanded ? 'Arată mai puțin' : `Arată toate (+${remainingCount})`}
-      <ChevronDown
-        className={`w-4 h-4 transition-transform duration-300 ${expanded ? 'rotate-180' : ''}`}
-      />
-    </button>
-  </div>
-)
+}> = ({ expanded, onToggle, remainingCount, className }) => {
+  const t = useTranslations()
+
+  return (
+    <div className={`flex justify-center mt-4 ${className ?? ''}`}>
+      <button
+        onClick={onToggle}
+        className="cursor-pointer flex items-center gap-1.5 text-sm font-semibold text-[#3F3F3F] font-work-sans tracking-wide transition-colors duration-200 hover:text-[#C8A97E] py-2 px-4"
+      >
+        {expanded ? t('show-less') : t('show-more', { count: remainingCount })}
+        <ChevronDown
+          className={`w-4 h-4 transition-transform duration-300 ${expanded ? 'rotate-180' : ''}`}
+        />
+      </button>
+    </div>
+  )
+}
 
 const ServiceList: React.FC<{
   services: ServiceType[]

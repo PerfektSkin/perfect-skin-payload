@@ -4,7 +4,7 @@ import { anyone } from '../access/anyone'
 import { authenticated } from '../access/authenticated'
 import { slugField } from '@/fields/slug'
 import { generatePreviewPath } from '../utilities/generatePreviewPath'
-import { revalidateNews, revalidateNewsDelete } from './News/hooks/revalidateNews'
+import { revalidateOffers, revalidateOffersDelete } from './Offers/hooks/revalidateOffers'
 
 import { Archive } from '../blocks/ArchiveBlock/config'
 import { CallToAction } from '../blocks/CallToAction/config'
@@ -18,8 +18,12 @@ import { FollowUs } from '../blocks/FollowUs/config'
 import { ClientReviews } from '../blocks/ClientReviews/config'
 import { OurPartners } from '../blocks/OurPartners/config'
 
-export const News: CollectionConfig = {
-  slug: 'news',
+export const Offers: CollectionConfig = {
+  slug: 'offers',
+  labels: {
+    singular: 'Offer',
+    plural: 'Offers',
+  },
   access: {
     create: authenticated,
     delete: authenticated,
@@ -33,7 +37,7 @@ export const News: CollectionConfig = {
       url: ({ data, locale }) => {
         const path = generatePreviewPath({
           slug: typeof data?.slug === 'string' ? data.slug : '',
-          collection: 'news',
+          collection: 'offers',
           locale: locale.code,
         })
 
@@ -43,7 +47,7 @@ export const News: CollectionConfig = {
     preview: (data, { locale }) => {
       const path = generatePreviewPath({
         slug: typeof data?.slug === 'string' ? data.slug : '',
-        collection: 'news',
+        collection: 'offers',
         locale,
       })
 
@@ -58,7 +62,7 @@ export const News: CollectionConfig = {
       required: true,
       label: 'Image',
       admin: {
-        description: 'Shown in the news carousel and at the top of the news page.',
+        description: 'Shown in the offers carousel and at the top of the offer page.',
       },
     },
     {
@@ -67,17 +71,6 @@ export const News: CollectionConfig = {
       required: true,
       localized: true,
       label: 'Title',
-    },
-    {
-      name: 'shortDescription',
-      type: 'textarea',
-      required: true,
-      localized: true,
-      label: 'Short Description',
-      maxLength: 280,
-      admin: {
-        description: 'Short summary shown in the carousel listing.',
-      },
     },
     ...slugField(),
     {
@@ -112,7 +105,7 @@ export const News: CollectionConfig = {
     },
   ],
   hooks: {
-    afterChange: [revalidateNews],
-    afterDelete: [revalidateNewsDelete],
+    afterChange: [revalidateOffers],
+    afterDelete: [revalidateOffersDelete],
   },
 }

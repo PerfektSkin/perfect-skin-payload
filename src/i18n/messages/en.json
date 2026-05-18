@@ -13,5 +13,7 @@
   "previous": "Previous",
   "next": "Next",
   "more-pages": "More pages",
-  "read-more": "Read more"
+  "read-more": "Read more",
+  "show-less": "Show less",
+  "show-more": "Show more (+{count})"
 }

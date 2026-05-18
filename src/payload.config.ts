@@ -28,6 +28,7 @@ import Users from './collections/Users'
 import { Members } from './collections/Members'
 import { Reviews } from './collections/Reviews'
 import { News } from './collections/News'
+import { Offers } from './collections/Offers'
 import { amocrmStatusHandler } from './endpoints/amocrmSetup'
 import { syncFormSubmissionToAmoCRM } from './hooks/syncAmoCRM'
 import { Footer } from './globals/Footer/config'
@@ -131,7 +132,7 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URL || '',
     },
   }),
-  collections: [Pages, Posts, Media, Categories, Users, Members, Reviews, News],
+  collections: [Pages, Posts, Media, Categories, Users, Members, Reviews, News, Offers],
   cors: [process.env.PAYLOAD_PUBLIC_SERVER_URL || ''].filter(Boolean),
   csrf: [process.env.PAYLOAD_PUBLIC_SERVER_URL || ''].filter(Boolean),
   endpoints: [
