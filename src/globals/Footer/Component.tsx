@@ -24,9 +24,15 @@ async function getPages(locale: TypedLocale): Promise<Page[]> {
   const result = await payload.find({
     collection: 'pages',
     draft: false,
+    depth: 0,
     limit: 100,
     locale,
     overrideAccess: false,
+    select: {
+      id: true,
+      slug: true,
+      title: true,
+    },
     where: {
       slug: {
         not_equals: 'home',
@@ -35,7 +41,7 @@ async function getPages(locale: TypedLocale): Promise<Page[]> {
     sort: 'createdAt',
   })
 
-  return result.docs || []
+  return (result.docs || []) as Page[]
 }
 
 const getCachedPages = (locale: TypedLocale) =>
@@ -80,9 +86,14 @@ function getExcludedNavSlugs(header: HeaderType): Set<string> {
   return slugs
 }
 
-export async function Footer({ locale }: { locale: TypedLocale }) {
-  const footer = (await getCachedGlobal('footer', 2, locale)()) as Footer
-  const header = (await getCachedGlobal('header', 1, locale)()) as HeaderType
+export async function Footer({
+  locale,
+  header,
+}: {
+  locale: TypedLocale
+  header: HeaderType
+}) {
+  const footer = (await getCachedGlobal('footer', 1, locale)()) as Footer
   const allPages = await getCachedPages(locale)()
 
   // Filter out pages that are parent nav items with sub-items or are sub-items themselves
@@ -114,7 +125,6 @@ export async function Footer({ locale }: { locale: TypedLocale }) {
           postsContactForm={postsContactForm}
           postsContactFormTitle={postsContactFormTitle}
           postsContactFormSubtitle={postsContactFormSubtitle}
-          locale={locale}
         />
       )}
 

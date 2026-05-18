@@ -1,20 +1,29 @@
 'use client'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useDebounce } from '@/utilities/useDebounce'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 
 export const Search: React.FC = () => {
-  const [value, setValue] = useState('')
+  const searchParams = useSearchParams()
+  const initialQuery = searchParams.get('q') ?? ''
+  const [value, setValue] = useState(initialQuery)
   const router = useRouter()
   const t = useTranslations()
+  const isFirstRender = useRef(true)
 
   const debouncedValue = useDebounce(value)
 
   useEffect(() => {
-    router.push(`/search${debouncedValue ? `?q=${debouncedValue}` : ''}`)
+    if (isFirstRender.current) {
+      isFirstRender.current = false
+      return
+    }
+
+    const nextUrl = debouncedValue ? `/search?q=${encodeURIComponent(debouncedValue)}` : '/search'
+    router.replace(nextUrl)
   }, [debouncedValue, router])
 
   return (
@@ -29,6 +38,7 @@ export const Search: React.FC = () => {
         </Label>
         <Input
           id="search"
+          value={value}
           onChange={(event) => {
             setValue(event.target.value)
           }}

@@ -62,6 +62,7 @@ export default async function RootLayout({ children, params }: Args) {
 
   const { isEnabled } = await draftMode()
   const messages = await getMessages()
+  const header = (await getCachedGlobal('header', 1, locale)()) as HeaderType
 
   return (
     <html
@@ -77,9 +78,9 @@ export default async function RootLayout({ children, params }: Args) {
         <Providers>
           <NextIntlClientProvider messages={messages}>
             <LivePreviewListener />
-            <Header locale={locale} />
+            <Header locale={locale} header={header} />
             {children}
-            <Footer locale={locale} />
+            <Footer locale={locale} header={header} />
           </NextIntlClientProvider>
         </Providers>
       </body>

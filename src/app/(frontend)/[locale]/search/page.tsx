@@ -7,8 +7,11 @@ import React from 'react'
 import { Post } from '@/payload-types'
 import { Search } from '@/search/Component'
 import PageClient from './page.client'
+import { Suspense } from 'react'
 import { getTranslations } from 'next-intl/server'
 import { TypedLocale } from 'payload'
+
+export const revalidate = 60
 
 type Args = {
   searchParams: Promise<{
@@ -68,7 +71,9 @@ export default async function Page({
       <div className="container mb-16">
         <div className="prose max-w-none">
           <h1 className="sr-only">{t('search')}</h1>
-          <Search />
+          <Suspense fallback={null}>
+            <Search />
+          </Suspense>
         </div>
       </div>
 

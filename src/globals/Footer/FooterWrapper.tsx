@@ -1,18 +1,16 @@
 'use client'
 
-import { usePathname } from 'next/navigation'
-import { useEffect, useState } from 'react'
 import type { Form as FormType } from '@payloadcms/plugin-form-builder/types'
 import { FormBlock } from '@/blocks/Form/Component'
+import { useFooterPage } from './FooterPageContext'
 
 type FooterWrapperProps = {
-  contactForm?: FormType | string | null | any
+  contactForm?: FormType | string | null
   contactFormTitle?: string | null
   contactFormSubtitle?: string | null
-  postsContactForm?: FormType | string | null | any
+  postsContactForm?: FormType | string | null
   postsContactFormTitle?: string | null
   postsContactFormSubtitle?: string | null
-  locale: string
 }
 
 export function FooterWrapper({
@@ -22,90 +20,44 @@ export function FooterWrapper({
   postsContactForm,
   postsContactFormTitle,
   postsContactFormSubtitle,
-  locale,
 }: FooterWrapperProps) {
-  const pathname = usePathname()
-  const [showForm, setShowForm] = useState(false)
-  const [loading, setLoading] = useState(true)
-  const [isPostPage, setIsPostPage] = useState(false)
-  const [pageForm, setPageForm] = useState<any>(null)
-  const [pageFormTitle, setPageFormTitle] = useState<string | null>(null)
-  const [pageFormSubtitle, setPageFormSubtitle] = useState<string | null>(null)
+  const { pageData } = useFooterPage()
 
-  useEffect(() => {
-    const checkPage = async () => {
-      try {
-        const postPage = pathname.includes('/posts/')
+  const isPostPage = pageData?.isPostPage ?? false
+  const showForm = isPostPage || Boolean(pageData?.showFooterContactForm)
 
-        if (postPage) {
-          setIsPostPage(true)
-          setShowForm(true)
-          setLoading(false)
-          return
-        }
-
-        // pathname is e.g. "/ro", "/ro/despre-noi", "/en/about"
-        // First segment is always the locale, rest is the page path
-        const pathParts = pathname.split('/').filter(Boolean)
-        // Remove the locale prefix (first segment), then get the last segment as slug
-        const pathWithoutLocale = pathParts.slice(1)
-        const slug = pathWithoutLocale[pathWithoutLocale.length - 1] || 'home'
-
-        const res = await fetch(
-          `/api/pages?where[slug][equals]=${slug}&locale=${locale}&depth=2&limit=1`,
-        )
-        const data = await res.json()
-        const page = data.docs?.[0]
-
-        setShowForm(page?.showFooterContactForm || false)
-
-        // Use page-specific form if available
-        if (page?.footerForm && typeof page.footerForm === 'object') {
-          setPageForm(page.footerForm)
-        }
-        if (page?.footerFormTitle) {
-          setPageFormTitle(page.footerFormTitle)
-        }
-        if (page?.footerFormSubtitle) {
-          setPageFormSubtitle(page.footerFormSubtitle)
-        }
-      } catch (error) {
-        console.error('Error checking page:', error)
-        setShowForm(false)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    checkPage()
-  }, [pathname, locale])
-
-  // Determine which form to use based on context
-  let activeForm: any
+  let activeForm: FormType | null | undefined
   let activeTitle: string | null | undefined
   let activeSubtitle: string | null | undefined
 
   if (isPostPage) {
-    // For posts: use posts-specific form, fallback to global
-    activeForm = postsContactForm && typeof postsContactForm === 'object'
-      ? postsContactForm
-      : contactForm
+    activeForm =
+      postsContactForm && typeof postsContactForm === 'object'
+        ? (postsContactForm as FormType)
+        : contactForm && typeof contactForm === 'object'
+          ? (contactForm as FormType)
+          : null
     activeTitle = postsContactFormTitle || contactFormTitle
     activeSubtitle = postsContactFormSubtitle || contactFormSubtitle
   } else {
-    // For pages: use page-specific form, fallback to global
-    activeForm = pageForm || contactForm
-    activeTitle = pageFormTitle || contactFormTitle
-    activeSubtitle = pageFormSubtitle || contactFormSubtitle
+    const pageForm =
+      pageData?.footerForm && typeof pageData.footerForm === 'object'
+        ? (pageData.footerForm as unknown as FormType)
+        : null
+    activeForm =
+      pageForm ||
+      (contactForm && typeof contactForm === 'object' ? (contactForm as FormType) : null)
+    activeTitle = pageData?.footerFormTitle || contactFormTitle
+    activeSubtitle = pageData?.footerFormSubtitle || contactFormSubtitle
   }
 
-  if (loading || !showForm || !activeForm || typeof activeForm === 'string') {
+  if (!showForm || !activeForm) {
     return null
   }
 
   return (
     <FormBlock
-      form={activeForm as any}
+      form={activeForm}
       enableIntro={false}
       title={activeTitle || undefined}
       subtitle={activeSubtitle || undefined}

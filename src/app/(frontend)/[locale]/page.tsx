@@ -12,7 +12,11 @@ import type { Page as PageType } from '@/payload-types'
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { RenderHero } from '@/heros/RenderHero'
 import { ServiceSidebar } from '@/components/ServiceSidebar'
+import { SetFooterPageData } from '@/globals/Footer/SetFooterPageData'
+import { getFooterPageDataFromPage } from '@/utilities/footerPageData'
 import PageClient from './[slug]/page.client'
+
+export const revalidate = 600
 
 type Args = {
   params: Promise<{
@@ -44,7 +48,7 @@ export default async function Page({ params: paramsPromise, searchParams: search
   return (
     <article>
       <PageClient />
-      <PayloadRedirects disableNotFound url={url} />
+      <SetFooterPageData data={getFooterPageDataFromPage(page)} />
 
       <RenderHero {...hero} pageTitle={title} />
 
@@ -90,6 +94,7 @@ const queryPage = cache(async ({ locale, slug }: { locale: TypedLocale; slug: st
 
   const result = await payload.find({
     collection: 'pages',
+    depth: 2,
     draft,
     limit: 1,
     overrideAccess: draft,

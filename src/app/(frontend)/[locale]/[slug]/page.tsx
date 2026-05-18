@@ -10,17 +10,25 @@ import type { Page as PageType } from '@/payload-types'
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { RenderHero } from '@/heros/RenderHero'
 import { ServiceSidebar } from '@/components/ServiceSidebar'
+import { SetFooterPageData } from '@/globals/Footer/SetFooterPageData'
 import { generateMeta } from '@/utilities/generateMeta'
+import { getFooterPageDataFromPage } from '@/utilities/footerPageData'
 import PageClient from './page.client'
 import { TypedLocale } from 'payload'
+
+export const revalidate = 600
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
   const pages = await payload.find({
     collection: 'pages',
     draft: false,
+    depth: 0,
     limit: 1000,
     overrideAccess: false,
+    select: {
+      slug: true,
+    },
   })
 
   const params = pages.docs
@@ -64,8 +72,7 @@ export default async function Page({ params: paramsPromise, searchParams: search
   return (
     <article className="">
       <PageClient />
-      {/* Allows redirects for valid pages too */}
-      <PayloadRedirects disableNotFound url={url} />
+      <SetFooterPageData data={getFooterPageDataFromPage(page)} />
 
       <RenderHero {...hero} pageTitle={title} />
 
@@ -113,6 +120,7 @@ const queryPage = cache(async ({ slug, locale }: { slug: string; locale: TypedLo
 
   const result = await payload.find({
     collection: 'pages',
+    depth: 2,
     draft,
     limit: 1,
     locale,

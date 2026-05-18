@@ -79,7 +79,7 @@ export async function generateStaticParams() {
   const posts = await payload.find({
     collection: 'posts',
     depth: 0,
-    limit: 10,
+    limit: 12,
     draft: false,
     overrideAccess: false,
   })

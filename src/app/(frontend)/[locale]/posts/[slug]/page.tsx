@@ -12,6 +12,8 @@ import type { Post } from '@/payload-types'
 
 import { RenderHero } from '@/heros/RenderHero'
 import { generateMeta } from '@/utilities/generateMeta'
+import { SetFooterPageData } from '@/globals/Footer/SetFooterPageData'
+import { footerPageDataForPost } from '@/utilities/footerPageData'
 import PageClient from './page.client'
 import { TypedLocale } from 'payload'
 
@@ -20,8 +22,12 @@ export async function generateStaticParams() {
   const posts = await payload.find({
     collection: 'posts',
     draft: false,
+    depth: 0,
     limit: 1000,
     overrideAccess: false,
+    select: {
+      slug: true,
+    },
   })
 
   const params = posts.docs.map(({ slug }) => {
@@ -48,9 +54,7 @@ export default async function Post({ params: paramsPromise }: Args) {
   return (
     <article className="pb-16">
       <PageClient />
-
-      {/* Allows redirects for valid pages too */}
-      <PayloadRedirects disableNotFound url={url} />
+      <SetFooterPageData data={footerPageDataForPost} />
 
       <RenderHero {...post.hero} pageTitle={post.title} />
 
@@ -80,6 +84,7 @@ const queryPost = cache(async ({ slug, locale }: { slug: string; locale: TypedLo
 
   const result = await payload.find({
     collection: 'posts',
+    depth: 2,
     draft,
     limit: 1,
     overrideAccess: draft,
