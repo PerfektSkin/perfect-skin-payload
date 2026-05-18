@@ -218,6 +218,18 @@ export const Pages: CollectionConfig = {
                   required: true,
                   label: 'Video',
                 },
+                {
+                  name: 'cover',
+                  type: 'upload',
+                  relationTo: 'media',
+                  label: 'Cover image (preview)',
+                  admin: {
+                    description: 'JPG/PNG thumbnail shown before the user presses play.',
+                  },
+                  filterOptions: {
+                    mimeType: { contains: 'image' },
+                  },
+                },
               ],
             },
           ],

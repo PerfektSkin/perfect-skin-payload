@@ -236,6 +236,10 @@ export interface Page {
   sidebarMedia?:
     | {
         video: number | Media;
+        /**
+         * JPG/PNG thumbnail shown before the user presses play.
+         */
+        cover?: (number | null) | Media;
         id?: string | null;
       }[]
     | null;
@@ -931,6 +935,10 @@ export interface FollowUsBlock {
   instagramUrl?: string | null;
   posts: {
     video: number | Media;
+    /**
+     * Upload a JPG/PNG thumbnail shown before play. Recommended — avoids loading video on page load.
+     */
+    cover?: (number | null) | Media;
     id?: string | null;
   }[];
   id?: string | null;
@@ -1272,6 +1280,7 @@ export interface PagesSelect<T extends boolean = true> {
     | T
     | {
         video?: T;
+        cover?: T;
         id?: T;
       };
   meta?:
@@ -1465,6 +1474,7 @@ export interface FollowUsBlockSelect<T extends boolean = true> {
     | T
     | {
         video?: T;
+        cover?: T;
         id?: T;
       };
   id?: T;

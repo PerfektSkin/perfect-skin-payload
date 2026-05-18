@@ -1,8 +1,10 @@
 'use client'
 
-import React, { useRef, useState } from 'react'
+import React from 'react'
 import { CMSLink } from '@/components/Link'
-import type { Page } from '@/payload-types'
+import { ClickToPlayVideo } from '@/components/ClickToPlayVideo'
+import type { Media, Page } from '@/payload-types'
+import { resolveVideoPosterUrl } from '@/utilities/getMediaPosterURL'
 
 type SidebarProps = {
   contactTitle?: string | null
@@ -44,54 +46,6 @@ function resolveHref(type: string, href: string): string {
   return href
 }
 
-const SidebarVideo: React.FC<{ videoUrl: string }> = ({ videoUrl }) => {
-  const videoRef = useRef<HTMLVideoElement>(null)
-  const [playing, setPlaying] = useState(false)
-
-  const handlePlay = () => {
-    if (!videoRef.current) return
-    if (playing) {
-      videoRef.current.pause()
-      setPlaying(false)
-    } else {
-      videoRef.current.play()
-      setPlaying(true)
-    }
-  }
-
-  return (
-    <div
-      className="relative group block aspect-4/5 overflow-hidden rounded-2xl cursor-pointer bg-[#F0F0F0]"
-      onClick={handlePlay}
-    >
-      <video
-        ref={videoRef}
-        src={videoUrl}
-        className="absolute inset-0 w-full h-full object-cover"
-        playsInline
-        loop
-        muted
-        poster=""
-      />
-      {!playing && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-12 h-12 rounded-full border-2 border-white/80 flex items-center justify-center bg-black/10 backdrop-blur-sm transition-transform duration-200 group-hover:scale-110">
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="white"
-              className="ml-1"
-            >
-              <polygon points="5 3 19 12 5 21 5 3" />
-            </svg>
-          </div>
-        </div>
-      )}
-    </div>
-  )
-}
-
 export const ServiceSidebar: React.FC<SidebarProps> = ({
   contactTitle,
   contactItems,
@@ -100,7 +54,6 @@ export const ServiceSidebar: React.FC<SidebarProps> = ({
 }) => {
   return (
     <div className="space-y-6 my-16">
-      {/* Contact Card */}
       <div className="rounded-2xl border border-[#E5E0DA] bg-white p-6 shadow-sm">
         {contactTitle && (
           <h3 className="text-lg font-bold text-[#2C2C2C] mb-6 font-urbanist">
@@ -108,7 +61,6 @@ export const ServiceSidebar: React.FC<SidebarProps> = ({
           </h3>
         )}
 
-        {/* Contact Items */}
         {contactItems && contactItems.length > 0 && (
           <div className="space-y-5">
             {contactItems.map((item, index) => {
@@ -149,7 +101,6 @@ export const ServiceSidebar: React.FC<SidebarProps> = ({
           </div>
         )}
 
-        {/* Buttons — always filled #3F3F3F */}
         {buttons && buttons.length > 0 && (
           <div className="mt-6 space-y-3">
             {buttons.map((btn, index) => (
@@ -171,20 +122,25 @@ export const ServiceSidebar: React.FC<SidebarProps> = ({
         )}
       </div>
 
-      {/* Sidebar Videos */}
       {media && media.length > 0 && (
         <div className="space-y-4">
           {media.map((item, index) => {
-            const video = item.video
-            const videoUrl =
-              video && typeof video !== 'string' && typeof video !== 'number'
-                ? (video as any)?.url
-                : null
+            const videoMedia =
+              item.video && typeof item.video === 'object' ? (item.video as Media) : null
+            const coverMedia =
+              item.cover && typeof item.cover === 'object' ? item.cover : null
+            const videoUrl = videoMedia?.url ?? null
 
             if (!videoUrl) return null
 
             return (
-              <SidebarVideo key={item.id || index} videoUrl={videoUrl} />
+              <ClickToPlayVideo
+                key={item.id || index}
+                videoUrl={videoUrl}
+                posterUrl={resolveVideoPosterUrl({ cover: coverMedia, video: videoMedia })}
+                posterAlt={coverMedia?.alt ?? videoMedia?.alt ?? ''}
+                wrapperClassName="aspect-4/5 rounded-2xl"
+              />
             )
           })}
         </div>

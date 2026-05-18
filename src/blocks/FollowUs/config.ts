@@ -43,6 +43,19 @@ export const FollowUs: Block = {
           required: true,
           label: 'Video',
         },
+        {
+          name: 'cover',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'Cover image (preview)',
+          admin: {
+            description:
+              'Upload a JPG/PNG thumbnail shown before play. Recommended — avoids loading video on page load.',
+          },
+          filterOptions: {
+            mimeType: { contains: 'image' },
+          },
+        },
       ],
     },
   ],
