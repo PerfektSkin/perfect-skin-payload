@@ -43,17 +43,19 @@ export const MediaBlock: React.FC<Props> = (props) => {
       <div className={cn('container', className)}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {mediaOne && typeof mediaOne === 'object' && (
-            <div className="overflow-hidden rounded-xs">
+            <div className="relative aspect-4/3 overflow-hidden rounded-xs">
               <Media
                 resource={mediaOne}
+                fill
                 imgClassName="w-full h-full object-cover"
               />
             </div>
           )}
           {mediaTwo && typeof mediaTwo === 'object' && (
-            <div className="overflow-hidden rounded-xs">
+            <div className="relative aspect-4/3 overflow-hidden rounded-xs">
               <Media
                 resource={mediaTwo}
+                fill
                 imgClassName="w-full h-full object-cover"
               />
             </div>
@@ -69,8 +71,9 @@ export const MediaBlock: React.FC<Props> = (props) => {
     const isMediaRight = position === 'mediaRight'
 
     const mediaColumn = (
-      <div className="relative w-full overflow-hidden rounded-xl">
+      <div className="relative w-full aspect-4/3 overflow-hidden rounded-xl">
         <Media
+          fill
           imgClassName={cn('w-full h-full object-cover rounded-xl', imgClassName)}
           resource={media}
           src={staticImage}
@@ -121,12 +124,19 @@ export const MediaBlock: React.FC<Props> = (props) => {
       )}
     >
       {position === 'fullscreen' && (
-        <div className="relative">
-          <Media resource={media} src={staticImage} />
+        <div className="relative aspect-video w-full overflow-hidden">
+          <Media fill imgClassName="w-full h-full object-cover" resource={media} src={staticImage} />
         </div>
       )}
       {position === 'default' && (
-        <Media imgClassName={cn('rounded', imgClassName)} resource={media} src={staticImage} />
+        <div className="relative aspect-video w-full overflow-hidden rounded">
+          <Media
+            fill
+            imgClassName={cn('w-full h-full object-cover', imgClassName)}
+            resource={media}
+            src={staticImage}
+          />
+        </div>
       )}
       {caption && (
         <div

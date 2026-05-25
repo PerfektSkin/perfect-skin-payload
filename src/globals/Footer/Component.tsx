@@ -135,7 +135,9 @@ export async function Footer({
           <div className="flex flex-col gap-10">
             {logo && typeof logo !== 'string' && (
               <Link href="/">
-                <Media resource={logo} imgClassName="max-w-[7rem] lg:max-w-[11rem]" />
+                <span className="relative block h-12 w-28 lg:h-20 lg:w-44">
+                  <Media resource={logo} fill imgClassName="object-contain object-left" />
+                </span>
               </Link>
             )}
             {socialMedia && (

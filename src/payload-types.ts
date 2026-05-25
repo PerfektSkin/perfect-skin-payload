@@ -1022,21 +1022,10 @@ export interface News {
    * Short summary shown in the carousel listing.
    */
   shortDescription: string;
-  slug?: string | null;
-  slugLock?: boolean | null;
-  layout: (
-    | CallToActionBlock
-    | ContentBlock
-    | MediaBlock
-    | ArchiveBlock
-    | FormBlock
-    | PriceListBlock
-    | TeamBlock
-    | AboutUsBlock
-    | FollowUsBlock
-    | ClientReviewsBlock
-    | OurPartnersBlock
-  )[];
+  /**
+   * Used when clicking this item in the News Block. Supports internal paths like /services or full URLs.
+   */
+  customLink?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1765,23 +1754,7 @@ export interface NewsSelect<T extends boolean = true> {
   image?: T;
   title?: T;
   shortDescription?: T;
-  slug?: T;
-  slugLock?: T;
-  layout?:
-    | T
-    | {
-        cta?: T | CallToActionBlockSelect<T>;
-        content?: T | ContentBlockSelect<T>;
-        mediaBlock?: T | MediaBlockSelect<T>;
-        archive?: T | ArchiveBlockSelect<T>;
-        formBlock?: T | FormBlockSelect<T>;
-        priceList?: T | PriceListBlockSelect<T>;
-        team?: T | TeamBlockSelect<T>;
-        aboutUs?: T | AboutUsBlockSelect<T>;
-        followUs?: T | FollowUsBlockSelect<T>;
-        clientReviews?: T | ClientReviewsBlockSelect<T>;
-        ourPartners?: T | OurPartnersBlockSelect<T>;
-      };
+  customLink?: T;
   updatedAt?: T;
   createdAt?: T;
 }

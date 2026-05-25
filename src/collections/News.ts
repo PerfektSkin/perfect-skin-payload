@@ -2,21 +2,6 @@ import type { CollectionConfig } from 'payload'
 
 import { anyone } from '../access/anyone'
 import { authenticated } from '../access/authenticated'
-import { slugField } from '@/fields/slug'
-import { generatePreviewPath } from '../utilities/generatePreviewPath'
-import { revalidateNews, revalidateNewsDelete } from './News/hooks/revalidateNews'
-
-import { Archive } from '../blocks/ArchiveBlock/config'
-import { CallToAction } from '../blocks/CallToAction/config'
-import { Content } from '../blocks/Content/config'
-import { FormBlock } from '../blocks/Form/config'
-import { MediaBlock } from '../blocks/MediaBlock/config'
-import { PriceList } from '../blocks/PriceList/config'
-import { Team } from '../blocks/Team/config'
-import { AboutUs } from '../blocks/AboutUs/config'
-import { FollowUs } from '../blocks/FollowUs/config'
-import { ClientReviews } from '../blocks/ClientReviews/config'
-import { OurPartners } from '../blocks/OurPartners/config'
 
 export const News: CollectionConfig = {
   slug: 'news',
@@ -27,28 +12,8 @@ export const News: CollectionConfig = {
     update: authenticated,
   },
   admin: {
-    defaultColumns: ['title', 'slug', 'updatedAt'],
+    defaultColumns: ['title', 'customLink', 'updatedAt'],
     useAsTitle: 'title',
-    livePreview: {
-      url: ({ data, locale }) => {
-        const path = generatePreviewPath({
-          slug: typeof data?.slug === 'string' ? data.slug : '',
-          collection: 'news',
-          locale: locale.code,
-        })
-
-        return `${process.env.NEXT_PUBLIC_SERVER_URL}${path}`
-      },
-    },
-    preview: (data, { locale }) => {
-      const path = generatePreviewPath({
-        slug: typeof data?.slug === 'string' ? data.slug : '',
-        collection: 'news',
-        locale,
-      })
-
-      return `${process.env.NEXT_PUBLIC_SERVER_URL}${path}`
-    },
   },
   fields: [
     {
@@ -79,40 +44,15 @@ export const News: CollectionConfig = {
         description: 'Short summary shown in the carousel listing.',
       },
     },
-    ...slugField(),
     {
-      type: 'tabs',
-      tabs: [
-        {
-          label: 'Content',
-          fields: [
-            {
-              name: 'layout',
-              type: 'blocks',
-              localized: true,
-              label: 'Layout',
-              required: true,
-              blocks: [
-                CallToAction,
-                Content,
-                MediaBlock,
-                Archive,
-                FormBlock,
-                PriceList,
-                Team,
-                AboutUs,
-                FollowUs,
-                ClientReviews,
-                OurPartners,
-              ],
-            },
-          ],
-        },
-      ],
+      name: 'customLink',
+      type: 'text',
+      localized: true,
+      label: 'Custom Link',
+      admin: {
+        description:
+          'Used when clicking this item in the News Block. Supports internal paths like /services or full URLs.',
+      },
     },
   ],
-  hooks: {
-    afterChange: [revalidateNews],
-    afterDelete: [revalidateNewsDelete],
-  },
 }

@@ -10,7 +10,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel'
-import type { Media as MediaType, News, Page } from '@/payload-types'
+import type { News, Page } from '@/payload-types'
 import { TypedLocale } from 'payload'
 
 type Props = Extract<Page['layout'][0], { blockType: 'newsBlock' }> & {
@@ -26,6 +26,31 @@ export const NewsBlockComponent: React.FC<Props> = ({ title, newsItems }) => {
   )
 
   if (populatedNews.length === 0) return null
+
+  const renderLinkedCard = (href: string | null | undefined, card: React.ReactNode) => {
+    if (!href) return card
+
+    const isExternal = href.startsWith('http://') || href.startsWith('https://')
+
+    if (isExternal) {
+      return (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group block h-full cursor-pointer"
+        >
+          {card}
+        </a>
+      )
+    }
+
+    return (
+      <Link href={href} className="group block h-full cursor-pointer">
+        {card}
+      </Link>
+    )
+  }
 
   return (
     <section>
@@ -45,7 +70,7 @@ export const NewsBlockComponent: React.FC<Props> = ({ title, newsItems }) => {
         >
           <CarouselContent className="-ml-6">
             {populatedNews.map((item, index) => {
-              const href = item.slug ? `/news/${item.slug}` : null
+              const href = item.customLink
 
               const card = (
                 <article className="flex flex-col gap-3 h-full">
@@ -76,13 +101,7 @@ export const NewsBlockComponent: React.FC<Props> = ({ title, newsItems }) => {
                   key={item.id || index}
                   className="pl-6 basis-[270px] md:basis-[320px] lg:basis-1/4"
                 >
-                  {href ? (
-                    <Link href={href} className="group block h-full cursor-pointer">
-                      {card}
-                    </Link>
-                  ) : (
-                    card
-                  )}
+                  {renderLinkedCard(href, card)}
                 </CarouselItem>
               )
             })}

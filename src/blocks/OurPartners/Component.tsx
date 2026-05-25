@@ -55,8 +55,8 @@ export const OurPartnersBlock: React.FC<Props> = ({ title, logos }) => {
                   key={`${logo.id || 'logo'}-${index}`}
                   className="pl-6 basis-[170px] sm:basis-[190px] md:basis-[220px] lg:basis-[240px]"
                 >
-                  <div className="h-[64px] md:h-[74px] flex items-center justify-center">
-                    <Media resource={logo} imgClassName="max-h-full w-auto object-contain" />
+                  <div className="relative h-[64px] md:h-[74px] flex items-center justify-center">
+                    <Media resource={logo} fill imgClassName="object-contain" />
                   </div>
                 </CarouselItem>
               ))}

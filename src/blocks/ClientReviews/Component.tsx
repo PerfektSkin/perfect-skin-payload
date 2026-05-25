@@ -87,6 +87,7 @@ export const ClientReviewsBlock: React.FC<Props> = (props) => {
                       {review.avatar && typeof review.avatar !== 'string' && typeof review.avatar !== 'number' && (
                         <Media
                           resource={review.avatar}
+                          fill
                           imgClassName="object-cover w-full h-full"
                         />
                       )}

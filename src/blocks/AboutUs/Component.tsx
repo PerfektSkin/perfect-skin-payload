@@ -27,12 +27,13 @@ export const AboutUsBlock: React.FC<Props> = (props) => {
 
   const imageColumn = (
     <div className={cn(
-      "relative w-full overflow-hidden max-h-[400px] lg:max-h-none",
+      "relative w-full aspect-4/3 overflow-hidden",
       isCard ? "rounded-xl" : "rounded-tl-[60px] lg:rounded-tl-[120px] rounded-xl",
     )}>
       {image && typeof image !== 'string' && (
         <Media
           resource={image}
+          fill
           imgClassName="w-full h-full object-cover"
         />
       )}
