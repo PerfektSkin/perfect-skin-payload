@@ -29,6 +29,7 @@ const urbanist = Urbanist({
 
 import { Footer } from '@/globals/Footer/Component'
 import { Header } from '@/globals/Header/Component'
+import { GoogleTagManager } from '@/components/GoogleTagManager'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
@@ -74,6 +75,7 @@ export default async function RootLayout({ children, params }: Args) {
       <head>
         <InitTheme />
       </head>
+      <GoogleTagManager />
       <body>
         <Providers>
           <NextIntlClientProvider messages={messages}>
