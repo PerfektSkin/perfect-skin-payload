@@ -258,4 +258,25 @@ export const PriceListBlock: React.FC<Props> = (props) => {
             )}
           </div>
         </div>
-      </d
+      </div>
+      )}
+      {/* ——— Extra Section (fără categorii) ——— */}
+      {extraServices && extraServices.length > 0 && (
+        <div className="mt-20">
+          <div className="container">
+            {extraTitle && (
+              <h3 className="text-2xl md:text-5xl font-medium text-[#2C2C2C] mb-4 md:mb-8 font-urbanist text-center">
+                {extraTitle}
+              </h3>
+            )}
+          </div>
+          <div className="py-8 md:py-12" style={{ backgroundColor: '#FFF8F3' }}>
+            <div className="container">
+              <ServiceList services={extraServices as ServiceType[]} />
+            </div>
+          </div>
+        </div>
+      )}
+    </section>
+  )
+}

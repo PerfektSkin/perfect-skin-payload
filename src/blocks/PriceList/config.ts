@@ -119,4 +119,20 @@ export const PriceList: Block = {
       ],
     },
     {
- 
+      name: 'extraTitle',
+      type: 'text',
+      localized: true,
+      label: 'Extra Section Title',
+    },
+    {
+      name: 'extraServices',
+      type: 'array',
+      label: 'Extra Services',
+      labels: {
+        singular: 'Service',
+        plural: 'Services',
+      },
+      fields: serviceFields,
+    },
+  ],
+}
