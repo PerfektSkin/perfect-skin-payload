@@ -118,5 +118,5 @@ export const PriceList: Block = {
         },
       ],
     },
-  ],
-}
+    {
+ 

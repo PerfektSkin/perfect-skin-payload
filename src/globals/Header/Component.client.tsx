@@ -21,6 +21,7 @@ import { Globe, Menu, ChevronRight, ChevronDown } from 'lucide-react'
 import { cn } from '@/utilities/ui'
 import { Button } from '@/components/ui/button'
 import { CMSLink } from '@/components/Link'
+import { hasNavSubItems, isSubItemCategory, isSubItemLink } from './subItems'
 
 interface HeaderClientProps {
   header: Header
@@ -122,7 +123,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ header }) => {
               navItems.length > 0 &&
               navItems.map((item, i) => {
                 const { link, subItems } = item
-                const hasSubItems = subItems && Array.isArray(subItems) && subItems.length > 0
+                const hasSubItems = hasNavSubItems(subItems)
 
                 if (hasSubItems) {
                   return (
@@ -225,7 +226,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ header }) => {
   )
 }
 
-// Mobile Nav Item with Subitems
+// Mobile Nav Item with Subitems (categories + nested links)
 function MobileNavItemWithSub({
   item,
   onClose,
@@ -253,12 +254,71 @@ function MobileNavItemWithSub({
 
       {isOpen && subItems && (
         <div className="pl-4 pb-2">
-          {subItems.map(({ link: subLink }, subIndex) => (
+          {subItems.map((subItem, subIndex) => {
+            if (isSubItemLink(subItem) && subItem.link) {
+              return (
+                <div key={subIndex} onClick={onClose}>
+                  <CMSLink
+                    {...subItem.link}
+                    label={null}
+                    className="flex items-center py-3 px-2 text-[#4A4A4A] font-work-sans text-base hover:text-[#2C2C2C] hover:bg-black/5 transition-colors"
+                  >
+                    <span className="w-2 h-2 rounded-full bg-[#3F3F3F] mr-3" />
+                    <span>{subItem.link.label}</span>
+                  </CMSLink>
+                </div>
+              )
+            }
+
+            if (isSubItemCategory(subItem)) {
+              return (
+                <MobileNavCategory key={subIndex} category={subItem} onClose={onClose} />
+              )
+            }
+
+            return null
+          })}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function MobileNavCategory({
+  category,
+  onClose,
+}: {
+  category: NonNullable<NonNullable<Header['navItems']>[number]['subItems']>[number]
+  onClose: () => void
+}) {
+  const [isOpen, setIsOpen] = useState(false)
+  const items = category.items ?? []
+
+  if (items.length === 0) return null
+
+  return (
+    <div>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center justify-between w-full py-3 px-2 text-[#4A4A4A] font-work-sans text-base hover:bg-black/5 transition-colors"
+      >
+        {category.categoryLabel}
+        <ChevronRight
+          className={cn(
+            'h-4 w-4 text-black/50 transition-transform duration-200',
+            isOpen && 'rotate-90',
+          )}
+        />
+      </button>
+
+      {isOpen && (
+        <div className="pl-4">
+          {items.map(({ link: subLink }, subIndex) => (
             <div key={subIndex} onClick={onClose}>
               <CMSLink
                 {...subLink}
                 label={null}
-                className="flex items-center py-3 px-2 text-[#4A4A4A] font-work-sans text-base hover:text-[#2C2C2C] hover:bg-black/5 transition-colors"
+                className="flex items-center py-2.5 px-2 text-[#4A4A4A] font-work-sans text-sm hover:text-[#2C2C2C] hover:bg-black/5 transition-colors"
               >
                 <span className="w-2 h-2 rounded-full bg-[#3F3F3F] mr-3" />
                 <span>{subLink?.label}</span>

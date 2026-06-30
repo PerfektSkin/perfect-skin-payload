@@ -835,6 +835,16 @@ export interface PriceListBlock {
       | null;
     id?: string | null;
   }[];
+  extraTitle?: string | null;
+  extraServices?:
+    | {
+        serviceName: string;
+        description?: string | null;
+        price: string;
+        image?: (number | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'priceList';
@@ -1487,6 +1497,16 @@ export interface PriceListBlockSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  extraTitle?: T;
+  extraServices?:
+    | T
+    | {
+        serviceName?: T;
+        description?: T;
+        price?: T;
+        image?: T;
+        id?: T;
+      };
   id?: T;
   blockName?: T;
 }
@@ -2044,11 +2064,12 @@ export interface Header {
           label: string;
         };
         /**
-         * Add submenu items that appear in a dropdown.
+         * Add direct links or category groups (e.g. Epilare → Epilare cu laser, Electroepilare).
          */
         subItems?:
           | {
-              link: {
+              itemType?: ('link' | 'category') | null;
+              link?: {
                 type?: ('reference' | 'custom') | null;
                 newTab?: boolean | null;
                 reference?: {
@@ -2056,8 +2077,27 @@ export interface Header {
                   value: number | Page;
                 } | null;
                 url?: string | null;
-                label: string;
+                label?: string | null;
               };
+              categoryLabel?: string | null;
+              /**
+               * Links that appear when hovering this category.
+               */
+              items?:
+                | {
+                    link: {
+                      type?: ('reference' | 'custom') | null;
+                      newTab?: boolean | null;
+                      reference?: {
+                        relationTo: 'pages';
+                        value: number | Page;
+                      } | null;
+                      url?: string | null;
+                      label: string;
+                    };
+                    id?: string | null;
+                  }[]
+                | null;
               id?: string | null;
             }[]
           | null;
@@ -2246,6 +2286,7 @@ export interface HeaderSelect<T extends boolean = true> {
         subItems?:
           | T
           | {
+              itemType?: T;
               link?:
                 | T
                 | {
@@ -2254,6 +2295,21 @@ export interface HeaderSelect<T extends boolean = true> {
                     reference?: T;
                     url?: T;
                     label?: T;
+                  };
+              categoryLabel?: T;
+              items?:
+                | T
+                | {
+                    link?:
+                      | T
+                      | {
+                          type?: T;
+                          newTab?: T;
+                          reference?: T;
+                          url?: T;
+                          label?: T;
+                        };
+                    id?: T;
                   };
               id?: T;
             };
@@ -2379,24 +2435,4 @@ export interface FooterSelect<T extends boolean = true> {
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings_select".
  */
-export interface SiteSettingsSelect<T extends boolean = true> {
-  siteName?: T;
-  siteTitle?: T;
-  siteDescription?: T;
-  ogImage?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "auth".
- */
-export interface Auth {
-  [k: string]: unknown;
-}
-
-
-declare module 'payload' {
-  export interface GeneratedTypes extends Config {}
-}
+export interface Si

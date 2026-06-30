@@ -141,7 +141,7 @@ const ServiceList: React.FC<{
 }
 
 export const PriceListBlock: React.FC<Props> = (props) => {
-  const { title, womanTitle, menTitle, categories } = props
+  const { title, womanTitle, menTitle, categories, extraTitle, extraServices } = props as any
   const [activeWomenTab, setActiveWomenTab] = useState(0)
   const [activeMenTab, setActiveMenTab] = useState(0)
 
@@ -258,8 +258,4 @@ export const PriceListBlock: React.FC<Props> = (props) => {
             )}
           </div>
         </div>
-      </div>
-      )}
-    </section>
-  )
-}
+      </d

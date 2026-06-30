@@ -9,39 +9,34 @@ import type { Header as HeaderType } from '@/payload-types'
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { cn } from '@/utilities/ui'
 import { LayoutGrid } from 'lucide-react'
+import {
+  type NavSubItems,
+  getLinkHref,
+  hasNavSubItems,
+  isSubItemCategory,
+  isSubItemLink,
+} from '../subItems'
 
 type NavItems = HeaderType['navItems']
 
-// Helper to get the href from a link object
-function getLinkHref(link: NonNullable<NavItems>[number]['link']): string {
-  if (!link) return '#'
+const menuItemClassName = cn(
+  'cursor-pointer rounded-none px-7 py-3 text-base font-normal font-work-sans',
+  'hover:bg-[#FFF8F3] focus:bg-[#FFF8F3] hover:text-black focus:text-black',
+  'transition-colors duration-150 w-full flex items-center gap-4',
+)
 
-  if (link.type === 'reference' && link.reference) {
-    const { relationTo, value } = link.reference
-    if (typeof value === 'object' && value?.slug) {
-      return relationTo === 'pages' ? `/${value.slug}` : `/${relationTo}/${value.slug}`
-    }
-  }
-
-  if (link.type === 'custom' && link.url) {
-    return link.url
-  }
-
-  return '#'
-}
-
-// Nav item with sub-items dropdown (hover-to-open)
+// Nav item with sub-items dropdown (flat links and/or categories with flyout)
 const NavItemWithDropdown: React.FC<{
   link: NonNullable<NavItems>[number]['link']
-  subItems: NonNullable<NavItems>[number]['subItems']
+  subItems: NavSubItems
   isLinkActive: (href: string) => boolean
 }> = ({ link, subItems, isLinkActive }) => {
   const [isOpen, setIsOpen] = useState(false)
+  const [activeCategoryIndex, setActiveCategoryIndex] = useState<number | null>(null)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const handleMouseEnter = useCallback(() => {
@@ -55,6 +50,7 @@ const NavItemWithDropdown: React.FC<{
   const handleMouseLeave = useCallback(() => {
     timeoutRef.current = setTimeout(() => {
       setIsOpen(false)
+      setActiveCategoryIndex(null)
     }, 150)
   }, [])
 
@@ -73,33 +69,82 @@ const NavItemWithDropdown: React.FC<{
         <DropdownMenuContent
           align="start"
           sideOffset={12}
-          className="min-w-[240px] bg-white text-black rounded-md border border-[#E5E0DA] shadow-lg p-0 overflow-hidden"
+          className="min-w-0 bg-transparent text-black rounded-none border-0 shadow-none p-0 overflow-visible"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           onCloseAutoFocus={(e) => e.preventDefault()}
         >
-          {subItems?.map(({ link: subLink }, subIndex) => {
-            const subHref = getLinkHref(subLink)
-            const isSubActive = isLinkActive(subHref)
-            const isLast = subIndex === (subItems?.length ?? 0) - 1
-            return (
-              <DropdownMenuItem
-                key={subIndex}
-                asChild
-                className={cn(
-                  'cursor-pointer rounded-none px-7 py-3 text-base font-normal font-work-sans',
-                  'hover:bg-[#FFF8F3] focus:bg-[#FFF8F3] hover:text-black focus:text-black',
-                  'transition-colors duration-150',
-                  isSubActive && 'bg-[#FFF8F3] font-medium',
-                )}
-              >
-                <Link href={subHref} className="w-full flex items-center gap-4">
-                  <LayoutGrid className="w-5 h-5" />
-                  <span>{subLink?.label}</span>
-                </Link>
-              </DropdownMenuItem>
-            )
-          })}
+          <div className="relative min-w-[240px] bg-white rounded-md shadow-lg overflow-visible">
+            {subItems?.map((subItem, subIndex) => {
+              if (isSubItemLink(subItem) && subItem.link) {
+                const subHref = getLinkHref(subItem.link)
+                const isSubActive = isLinkActive(subHref)
+
+                return (
+                  <Link
+                    key={subIndex}
+                    href={subHref}
+                    onMouseEnter={() => setActiveCategoryIndex(null)}
+                    className={cn(
+                      menuItemClassName,
+                      isSubActive && 'bg-[#FFF8F3] font-medium',
+                    )}
+                  >
+                    <LayoutGrid className="w-5 h-5 shrink-0" />
+                    <span>{subItem.link.label}</span>
+                  </Link>
+                )
+              }
+
+              if (!isSubItemCategory(subItem)) return null
+
+              const isActive = activeCategoryIndex === subIndex
+              const hasItems = (subItem.items ?? []).length > 0
+
+              return (
+                <div
+                  key={subIndex}
+                  onMouseEnter={() => {
+                    if (hasItems) setActiveCategoryIndex(subIndex)
+                  }}
+                >
+                  <div className={cn(menuItemClassName, isActive && 'bg-[#FFF8F3]')}>
+                    <LayoutGrid className="w-5 h-5 shrink-0" />
+                    <span>{subItem.categoryLabel}</span>
+                  </div>
+                </div>
+              )
+            })}
+
+            {/* Flyout poziționat relativ la panoul 1, mereu de sus */}
+            {activeCategoryIndex !== null && (() => {
+              const activeSubItem = subItems?.[activeCategoryIndex]
+              if (!activeSubItem || !isSubItemCategory(activeSubItem)) return null
+              const items = activeSubItem.items ?? []
+              if (items.length === 0) return null
+              return (
+                <div className="absolute left-full top-0 min-w-[240px] bg-white rounded-md shadow-lg overflow-hidden z-50">
+                  {items.map(({ link: nestedLink }, nestedIndex) => {
+                    const nestedHref = getLinkHref(nestedLink)
+                    const isNestedActive = isLinkActive(nestedHref)
+                    return (
+                      <Link
+                        key={nestedIndex}
+                        href={nestedHref}
+                        className={cn(
+                          menuItemClassName,
+                          isNestedActive && 'bg-[#FFF8F3] font-medium',
+                        )}
+                      >
+                        <LayoutGrid className="w-5 h-5 shrink-0" />
+                        <span>{nestedLink?.label}</span>
+                      </Link>
+                    )
+                  })}
+                </div>
+              )
+            })()}
+          </div>
         </DropdownMenuContent>
       </div>
     </DropdownMenu>
@@ -113,7 +158,6 @@ export const HeaderNav: React.FC<{ navItems?: NavItems }> = ({ navItems = [] }) 
     return null
   }
 
-  // Check if a link is active (exact match or nested route)
   const isLinkActive = (href: string): boolean => {
     if (href === '#') return false
     if (href === '/' && pathname === '/') return true
@@ -125,15 +169,14 @@ export const HeaderNav: React.FC<{ navItems?: NavItems }> = ({ navItems = [] }) 
     <nav className="flex items-center gap-5">
       {navItems.map((item, i) => {
         const { link, subItems } = item
-        const hasSubItems = subItems && Array.isArray(subItems) && subItems.length > 0
         const itemHref = getLinkHref(link)
 
-        if (hasSubItems) {
+        if (hasNavSubItems(subItems)) {
           return (
             <NavItemWithDropdown
               key={i}
               link={link}
-              subItems={subItems}
+              subItems={subItems!}
               isLinkActive={isLinkActive}
             />
           )

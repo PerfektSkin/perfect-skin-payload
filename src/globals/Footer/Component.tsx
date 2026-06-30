@@ -5,11 +5,8 @@ import { Globe, Send, Youtube } from 'lucide-react'
 import { FacebookIcon } from './icons/FacebookIcon'
 import { TiktokIcon } from './icons/TiktokIcon'
 import { InstagramIcon } from './icons/InstagramIcon'
-import configPromise from '@payload-config'
-import { getPayload } from 'payload'
-import { unstable_cache } from 'next/cache'
-
-import type { Footer, Header as HeaderType, Page } from '@/payload-types'
+import type { Footer, Header as HeaderType } from '@/payload-types'
+import { hasNavSubItems } from '@/globals/Header/subItems'
 
 import { CMSLink } from '@/components/Link'
 import { TypedLocale } from 'payload'
@@ -18,72 +15,29 @@ import { Media } from '@/components/Media'
 import { FooterWrapper } from './FooterWrapper'
 import { GoogleIcon } from './icons/GoogleIcon'
 
-async function getPages(locale: TypedLocale): Promise<Page[]> {
-  const payload = await getPayload({ config: configPromise })
 
-  const result = await payload.find({
-    collection: 'pages',
-    draft: false,
-    depth: 0,
-    limit: 100,
-    locale,
-    overrideAccess: false,
-    select: {
-      id: true,
-      slug: true,
-      title: true,
-    },
-    where: {
-      slug: {
-        not_equals: 'home',
-      },
-    },
-    sort: 'createdAt',
-  })
-
-  return (result.docs || []) as Page[]
-}
-
-const getCachedPages = (locale: TypedLocale) =>
-  unstable_cache(async () => getPages(locale), [`footer-pages-${locale}`], {
-    tags: ['pages', 'global_footer'],
-    revalidate: 3600,
-  })
-
-/** Returns slugs of pages that should be excluded from the footer:
- *  - parent nav items that have sub-items (e.g. "Servicii", "Evenimente")
- *  - pages that appear as sub-items in any nav dropdown
+/** Returns ordered nav items that are direct links (no sub-items),
+ *  as { slug, label } pairs — used to build the footer menu.
  */
-function getExcludedNavSlugs(header: HeaderType): Set<string> {
-  const slugs = new Set<string>()
+function getDirectNavLinks(header: HeaderType): { slug: string; label: string }[] {
   const navItems = header?.navItems
-  if (!navItems) return slugs
+  if (!navItems) return []
 
+  const result: { slug: string; label: string }[] = []
   for (const item of navItems) {
-    const hasSubItems = item.subItems && Array.isArray(item.subItems) && item.subItems.length > 0
-    if (!hasSubItems) continue
+    if (hasNavSubItems(item.subItems)) continue
 
-    // Exclude the parent nav item's page
     const link = item.link
     if (link?.type === 'reference' && link.reference) {
       const val = link.reference.value
       if (typeof val === 'object' && val && 'slug' in val && val.slug) {
-        slugs.add(val.slug)
+        result.push({ slug: val.slug as string, label: link.label || '' })
       }
-    }
-
-    // Exclude all sub-item pages
-    for (const sub of item.subItems!) {
-      const subLink = sub.link
-      if (subLink?.type === 'reference' && subLink.reference) {
-        const subVal = subLink.reference.value
-        if (typeof subVal === 'object' && subVal && 'slug' in subVal && subVal.slug) {
-          slugs.add(subVal.slug)
-        }
-      }
+    } else if (link?.type === 'custom' && link.url) {
+      result.push({ slug: link.url, label: link.label || '' })
     }
   }
-  return slugs
+  return result
 }
 
 export async function Footer({
@@ -94,11 +48,9 @@ export async function Footer({
   header: HeaderType
 }) {
   const footer = (await getCachedGlobal('footer', 1, locale)()) as Footer
-  const allPages = await getCachedPages(locale)()
 
-  // Filter out pages that are parent nav items with sub-items or are sub-items themselves
-  const excludedSlugs = getExcludedNavSlugs(header)
-  const pages = allPages.filter((page) => page.slug && !excludedSlugs.has(page.slug))
+  // Only show direct nav links (items without sub-menus), in nav order
+  const directNavLinks = getDirectNavLinks(header)
 
   const logo = footer?.logo
   const socialMedia = footer?.socialMedia
@@ -209,36 +161,16 @@ export async function Footer({
                   {column1.title}
                 </h3>
               )}
-              {pages && pages.length > 0 && (
+              {directNavLinks.length > 0 && (
                 <nav className="flex flex-col gap-3">
-                  {pages.map((page) => {
-                    if (typeof page === 'object' && page !== null && page.slug) {
-                      const pageTitle = page.title || 'Untitled'
-                      const pageSlug = page.slug
-                      const href = `/${locale}/${pageSlug}`
-
-                      return (
-                        <Link
-                          key={page.id || pageSlug}
-                          href={href}
-                          className="font-work-sans text-[#909596] text-sm hover:text-white transition-colors cursor-pointer"
-                        >
-                          {pageTitle}
-                        </Link>
-                      )
-                    }
-                    return null
-                  })}
-                </nav>
-              )}
-              {(!pages || pages.length === 0) && column1.links && column1.links.length > 0 && (
-                <nav className="flex flex-col gap-3">
-                  {column1.links.map((item, i) => (
-                    <CMSLink
-                      key={i}
-                      {...item.link}
+                  {directNavLinks.map(({ slug, label }) => (
+                    <Link
+                      key={slug}
+                      href={`/${locale}/${slug}`}
                       className="font-work-sans text-[#909596] text-sm hover:text-white transition-colors cursor-pointer"
-                    />
+                    >
+                      {label}
+                    </Link>
                   ))}
                 </nav>
               )}
@@ -360,3 +292,4 @@ export async function Footer({
     </footer>
   )
 }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           

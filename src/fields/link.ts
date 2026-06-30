@@ -1,4 +1,4 @@
-import type { Field } from 'payload'
+import type { Field, Condition } from 'payload'
 
 import deepMerge from '@/utilities/deepMerge'
 
@@ -18,15 +18,24 @@ export const appearanceOptions: Record<LinkAppearances, { label: string; value: 
 type LinkType = (options?: {
   appearances?: LinkAppearances[] | false
   disableLabel?: boolean
+  required?: boolean
   overrides?: Record<string, unknown>
+  condition?: Condition
 }) => Field
 
-export const link: LinkType = ({ appearances, disableLabel = false, overrides = {} } = {}) => {
+export const link: LinkType = ({
+  appearances,
+  disableLabel = false,
+  required = true,
+  overrides = {},
+  condition,
+} = {}) => {
   const linkResult: Field = {
     name: 'link',
     type: 'group',
     admin: {
       hideGutter: true,
+      ...(condition ? { condition } : {}),
     },
     fields: [
       {
@@ -77,7 +86,7 @@ export const link: LinkType = ({ appearances, disableLabel = false, overrides = 
       label: 'Document to link to',
       maxDepth: 1,
       relationTo: ['pages'],
-      required: true,
+      required,
     },
     {
       name: 'url',
@@ -86,7 +95,7 @@ export const link: LinkType = ({ appearances, disableLabel = false, overrides = 
         condition: (_, siblingData) => siblingData?.type === 'custom',
       },
       label: 'Custom URL',
-      required: true,
+      required,
     },
   ]
 
@@ -111,7 +120,7 @@ export const link: LinkType = ({ appearances, disableLabel = false, overrides = 
             width: '50%',
           },
           label: 'Label',
-          required: true,
+          required,
         },
       ],
     })
