@@ -75,7 +75,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ header }) => {
         <a href="/">
           <span className="flex items-center justify-center w-32">
             {logo && typeof logo === 'object' && (
-              <img src={logo.url || ''} alt={logo.alt || ''} className="h-24 w-24 object-contain" />
+              <img src={logo.url || ''} alt={logo.alt || ''} className="object-contain" />
             )}
           </span>
         </a>
@@ -271,9 +271,7 @@ function MobileNavItemWithSub({
             }
 
             if (isSubItemCategory(subItem)) {
-              return (
-                <MobileNavCategory key={subIndex} category={subItem} onClose={onClose} />
-              )
+              return <MobileNavCategory key={subIndex} category={subItem} onClose={onClose} />
             }
 
             return null
