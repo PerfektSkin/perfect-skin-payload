@@ -158,7 +158,14 @@ export interface Page {
   hero: {
     type: 'default' | 'withImage' | 'title';
     title: string;
+    /**
+     * Wide image or video shown on desktop screens. Videos autoplay muted.
+     */
     backgroundImage?: (number | null) | Media;
+    /**
+     * Optional portrait image or video shown on phones. If empty, the desktop background is used.
+     */
+    backgroundImageMobile?: (number | null) | Media;
     /**
      * Add a call-to-action button (e.g., "Schedule a call")
      */
@@ -501,7 +508,14 @@ export interface Post {
   hero: {
     type: 'default' | 'withImage' | 'title';
     title: string;
+    /**
+     * Wide image or video shown on desktop screens. Videos autoplay muted.
+     */
     backgroundImage?: (number | null) | Media;
+    /**
+     * Optional portrait image or video shown on phones. If empty, the desktop background is used.
+     */
+    backgroundImageMobile?: (number | null) | Media;
     /**
      * Add a call-to-action button (e.g., "Schedule a call")
      */
@@ -845,6 +859,21 @@ export interface PriceListBlock {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Optional call-to-action button shown centered below this section (e.g., "PROGRAMEAZĂ-TE"). Leave the link empty to hide it.
+   */
+  ctaButton?: {
+    label?: string | null;
+    link?: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?: {
+        relationTo: 'pages';
+        value: number | Page;
+      } | null;
+      url?: string | null;
+    };
+  };
   id?: string | null;
   blockName?: string | null;
   blockType: 'priceList';
@@ -862,6 +891,21 @@ export interface TeamBlock {
    * Select team members to display. You can reuse the same members across different Team blocks.
    */
   members: (number | Member)[];
+  /**
+   * Optional call-to-action button shown centered below this section (e.g., "PROGRAMEAZĂ-TE"). Leave the link empty to hide it.
+   */
+  ctaButton?: {
+    label?: string | null;
+    link?: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?: {
+        relationTo: 'pages';
+        value: number | Page;
+      } | null;
+      url?: string | null;
+    };
+  };
   id?: string | null;
   blockName?: string | null;
   blockType: 'team';
@@ -1287,6 +1331,7 @@ export interface PagesSelect<T extends boolean = true> {
         type?: T;
         title?: T;
         backgroundImage?: T;
+        backgroundImageMobile?: T;
         button?:
           | T
           | {
@@ -1507,6 +1552,19 @@ export interface PriceListBlockSelect<T extends boolean = true> {
         image?: T;
         id?: T;
       };
+  ctaButton?:
+    | T
+    | {
+        label?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+            };
+      };
   id?: T;
   blockName?: T;
 }
@@ -1517,6 +1575,19 @@ export interface PriceListBlockSelect<T extends boolean = true> {
 export interface TeamBlockSelect<T extends boolean = true> {
   title?: T;
   members?: T;
+  ctaButton?:
+    | T
+    | {
+        label?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+            };
+      };
   id?: T;
   blockName?: T;
 }
@@ -1615,6 +1686,7 @@ export interface PostsSelect<T extends boolean = true> {
         type?: T;
         title?: T;
         backgroundImage?: T;
+        backgroundImageMobile?: T;
         button?:
           | T
           | {

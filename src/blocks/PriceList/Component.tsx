@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import Image from 'next/image'
 import type { Page } from '@/payload-types'
 import { Button } from '@/components/ui/button'
+import { CTAButton } from '@/components/CTAButton'
 import { ChevronDown } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
@@ -141,7 +142,8 @@ const ServiceList: React.FC<{
 }
 
 export const PriceListBlock: React.FC<Props> = (props) => {
-  const { title, womanTitle, menTitle, categories, extraTitle, extraServices } = props as any
+  const { title, womanTitle, menTitle, categories, extraTitle, extraServices, ctaButton } =
+    props as any
   const [activeWomenTab, setActiveWomenTab] = useState(0)
   const [activeMenTab, setActiveMenTab] = useState(0)
 
@@ -214,6 +216,8 @@ export const PriceListBlock: React.FC<Props> = (props) => {
             )}
           </div>
         </div>
+
+        <CTAButton button={ctaButton} className="-translate-y-1/2" />
       </div>
       )}
 
@@ -258,6 +262,8 @@ export const PriceListBlock: React.FC<Props> = (props) => {
             )}
           </div>
         </div>
+
+        <CTAButton button={ctaButton} className="-translate-y-1/2" />
       </div>
       )}
       {/* ——— Extra Section (fără categorii) ——— */}
@@ -275,6 +281,8 @@ export const PriceListBlock: React.FC<Props> = (props) => {
               <ServiceList services={extraServices as ServiceType[]} />
             </div>
           </div>
+
+          <CTAButton button={ctaButton} className="-translate-y-1/2" />
         </div>
       )}
     </section>

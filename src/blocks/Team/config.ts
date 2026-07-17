@@ -1,5 +1,7 @@
 import type { Block } from 'payload'
 
+import { ctaButton } from '@/fields/ctaButton'
+
 export const Team: Block = {
   slug: 'team',
   interfaceName: 'TeamBlock',
@@ -29,5 +31,6 @@ export const Team: Block = {
         description: 'Select team members to display. You can reuse the same members across different Team blocks.',
       },
     },
+    ctaButton,
   ],
 }

@@ -41,8 +41,13 @@ export const VideoMedia: React.FC<MediaProps> = (props) => {
   }, [isInView])
 
   if (resource && typeof resource === 'object') {
-    const { filename } = resource
-    const src = isInView ? `${process.env.NEXT_PUBLIC_SERVER_URL}/media/${filename}` : undefined
+    const { filename, url } = resource
+    const resolvedSrc = url
+      ? url.startsWith('http')
+        ? url
+        : `${process.env.NEXT_PUBLIC_SERVER_URL}${url}`
+      : `${process.env.NEXT_PUBLIC_SERVER_URL}/media/${filename}`
+    const src = isInView ? resolvedSrc : undefined
 
     return (
       <div ref={containerRef} className="contents">

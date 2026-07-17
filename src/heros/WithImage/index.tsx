@@ -7,12 +7,39 @@ import type { Page } from '@/payload-types'
 import { Media } from '@/components/Media'
 import { CMSLink } from '@/components/Link'
 
-export const WithImageHero: React.FC<Page['hero']> = ({ title, backgroundImage, button }) => {
+type BackgroundMediaProps = {
+  resource: NonNullable<Page['hero']['backgroundImage']>
+  priority?: boolean
+}
+
+const BackgroundMedia: React.FC<BackgroundMediaProps> = ({ resource, priority }) => (
+  <Media
+    fill
+    imgClassName="-z-10 object-cover object-bottom"
+    videoClassName="absolute inset-0 -z-10 h-full w-full object-cover object-bottom"
+    priority={priority}
+    resource={resource}
+  />
+)
+
+export const WithImageHero: React.FC<Page['hero']> = ({
+  title,
+  backgroundImage,
+  backgroundImageMobile,
+  button,
+}) => {
   const { setHeaderTheme } = useHeaderTheme()
 
   useEffect(() => {
     setHeaderTheme('dark')
   })
+
+  const desktopMedia =
+    backgroundImage && typeof backgroundImage === 'object' ? backgroundImage : null
+  const mobileMedia =
+    backgroundImageMobile && typeof backgroundImageMobile === 'object'
+      ? backgroundImageMobile
+      : null
 
   return (
     <div className="relative flex items-center text-white" data-theme="dark">
@@ -32,16 +59,18 @@ export const WithImageHero: React.FC<Page['hero']> = ({ title, backgroundImage, 
         )}
       </div>
       <div className="min-h-[70vh] select-none">
-        {backgroundImage && typeof backgroundImage === 'object' && (
-          <React.Fragment>
-            <Media
-              fill
-              imgClassName="-z-10 object-cover object-bottom"
-              priority
-              resource={backgroundImage}
-            />
-            <div className="absolute inset-0 bg-black/30 pointer-events-none -z-[5]" />
-          </React.Fragment>
+        {desktopMedia && (
+          <div className={mobileMedia ? 'max-md:hidden' : undefined}>
+            <BackgroundMedia priority resource={desktopMedia} />
+          </div>
+        )}
+        {mobileMedia && (
+          <div className="md:hidden">
+            <BackgroundMedia priority resource={mobileMedia} />
+          </div>
+        )}
+        {(desktopMedia || mobileMedia) && (
+          <div className="absolute inset-0 bg-black/30 pointer-events-none -z-[5]" />
         )}
       </div>
     </div>

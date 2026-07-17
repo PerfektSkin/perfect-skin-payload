@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { Media } from '@/components/Media'
+import { CTAButton } from '@/components/CTAButton'
 import {
   Carousel,
   CarouselContent,
@@ -17,7 +18,7 @@ type Props = Extract<Page['layout'][0], { blockType: 'team' }> & {
 }
 
 export const TeamBlock: React.FC<Props> = (props) => {
-  const { title, members } = props
+  const { title, members, ctaButton } = props
 
   if (!members || members.length === 0) return null
 
@@ -83,6 +84,8 @@ export const TeamBlock: React.FC<Props> = (props) => {
             className="hidden md:flex -right-8 lg:-right-10 w-12 h-12 border-0 bg-transparent hover:bg-transparent disabled:opacity-30 [&_svg]:h-12! [&_svg]:w-12! [&_svg]:text-[#fcbf90]! "
           />
         </Carousel>
+
+        <CTAButton button={ctaButton} className="mt-8 md:mt-10" />
       </div>
     </section>
   )

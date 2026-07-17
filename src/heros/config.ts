@@ -38,9 +38,21 @@ export const hero: Field = {
       name: 'backgroundImage',
       type: 'upload',
       relationTo: 'media',
-      label: 'Background Image',
+      label: 'Background (Desktop) — Image or Video',
       admin: {
         condition: (_, { type } = {}) => type === 'withImage' || type === 'default',
+        description: 'Wide image or video shown on desktop screens. Videos autoplay muted.',
+      },
+    },
+    {
+      name: 'backgroundImageMobile',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Background (Mobile) — Image or Video',
+      admin: {
+        condition: (_, { type } = {}) => type === 'withImage' || type === 'default',
+        description:
+          'Optional portrait image or video shown on phones. If empty, the desktop background is used.',
       },
     },
     {

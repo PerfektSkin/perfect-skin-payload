@@ -1,5 +1,7 @@
 import type { Block, Field } from 'payload'
 
+import { ctaButton } from '@/fields/ctaButton'
+
 const serviceFields: Field[] = [
   {
     name: 'serviceName',
@@ -134,5 +136,6 @@ export const PriceList: Block = {
       },
       fields: serviceFields,
     },
+    ctaButton,
   ],
 }
